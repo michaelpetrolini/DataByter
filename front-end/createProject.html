@@ -1,0 +1,184 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DataByter</title>
+  <meta name="description" content="Laboratory #4 of Sistemi Orientati ad Internet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Lab #4 of Sistemi Orientati ad Internet">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://soi-lab04">
+  <meta property="og:image" content="http://soi-lab04/icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/eos-icons.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+<body>
+
+<div class="content">
+
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+  </div>
+
+  <div class="header">
+    <h2 class="text-center">Create a new Project</h2>
+  </div>
+
+  <a href="/">
+    <i class="eos-icons">backspace</i>
+    <span>Back</span>
+  </a>
+
+  <div class="panel">
+    <h5>Project properties</h5>
+    <div class="ibox-content">
+      <div class="ibox-elem">
+          <label>Name:</label>
+          <input type="text" class="form-control" id="name" value="">
+      </div>
+      <div class="ibox-elem">
+        <label>Description:</label>
+        <input type="text" class="form-control" id="description" value="">
+    </div>
+      <div class="ibox-elem">
+        <label>Type:</label>
+        <input type="radio" id="text" name="type" value="text" checked="checked">
+        <label for="text">Text</label>
+        <input type="radio" id="image" name="type" value="image">
+        <label for="image">Image</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panels -->
+  <div class="panel">
+    <form name="new-field">
+      <div class="form-group">
+        <div class="input-group">
+          <input name="field-name" type="text" value="" maxlength="15">
+          <select name="field-type">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="boolean">Boolean</option>
+            <option value="date">Date</option>
+          </select>
+          <button type="submit">
+            <i class="eos-icons">add</i>
+            <span>Add</span>
+          </button>
+        </div>
+      </div>
+    </form>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="fields">
+      <div class="columns">
+        <h5>Field</h5>
+        <h5>Type</h5>
+        <h5>Label</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <form name="new-label">
+      <div class="form-group">
+        <div class="input-group">
+          <input name="label-value" type="text" value="" maxlength="15">
+          <button type="submit">
+            <i class="eos-icons">add</i>
+            <span>Add</span>
+          </button>
+        </div>
+      </div>
+    </form>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="labels"></div>
+  </div>
+
+  <div class="act-btn">
+    <a href="/">
+      <i class="eos-icons">backspace</i>
+      <span>Cancel</span>
+    </a>
+    <button id="save-project">
+      <i class="eos-icons">save</i>
+      <span>Save Project</span>
+    </button>
+  </div>
+</div>
+
+<script type="text/html" id="field-template">
+  <div class="field-left">
+    <label for="" class="field-name"></label>
+    <select for="" name="field-type" disabled>
+      <option value="string">String</option>
+      <option value="number">Number</option>
+      <option value="boolean">Boolean</option>
+      <option value="date">Date</option>
+    </select>
+    <input for="" type="radio" name="isLabel">
+  </div>
+
+  <div class="field-right">
+    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
+    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
+  </div>
+</script>
+
+<script type="text/html" id="field-edit-template">
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" maxlength="15">
+      <select name="field-type">
+        <option value="string">String</option>
+        <option value="number">Number</option>
+        <option value="boolean">Boolean</option>
+        <option value="date">Date</option>
+      </select>
+      <button name="save" class="primary"><i class="eos-icons">save</i></button>
+      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="label-template">
+  <div class="label-left">
+    <label for="" class="label-value"></label>
+  </div>
+
+  <div class="label-right">
+    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
+    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
+  </div>
+</script>
+
+<script type="text/html" id="label-edit-template">
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" maxlength="15">
+      <button name="save" class="primary"><i class="eos-icons">save</i></button>
+      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
+    </div>
+  </div>
+</script>
+
+<script src="js/vendor/modernizr-3.11.2.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/manageField.js"></script>
+<script src="js/manageLabel.js"></script>
+<script src="js/manageProject.js"></script>
+
+</body>
+</html>

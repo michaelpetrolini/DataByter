@@ -1,4 +1,6 @@
-/* Write here anything required to complete the laboratory */
+body {
+  background-color: #f3f3f3;
+}
 
 h1,h2,h3,h4,h5,label,input,button,select,option,p,textarea {
   color: #444;
@@ -6,39 +8,6 @@ h1,h2,h3,h4,h5,label,input,button,select,option,p,textarea {
 
 .text-center {
   text-align: center;
-}
-
-button i.eos-icons ~ span {
-  line-height: 1.5rem;
-  margin-left: 0.5rem;
-  height: 24px;
-  display: inline-block;
-}
-
-button {
-  line-height: 24px;
-  border-inline: none;
-  border-radius: 6px;
-  padding: 5px 10px;
-  background-color: #6577c9;
-  box-shadow: none;
-  border: 1px solid #6577c9;
-  color: white;
-}
-
-button:hover, button:focus {
-  background-color: #f8c82a;
-  border-color: #f8c82a;
-}
-
-button.warn {
-  background-color: #C82AF8;
-  border-color: #C82AF8;
-}
-
-button.warn:hover, button.warn:focus {
-  background-color: #2AF8C8;
-  border-color: #2AF8C8;
 }
 
 input[type=text] {
@@ -81,13 +50,6 @@ input[type=text]:focus {
   max-width: 90%;
 }
 
-.header {
-}
-
-.header h1 {
-  /*TODO*/
-}
-
 .header img.logo {
   margin-right: 1rem;
 }
@@ -95,12 +57,43 @@ input[type=text]:focus {
 .panel {
   padding: 1rem;
   border-radius: 6px;
-  border: 1px solid #ccdae3;
-  background-color: #edf0f2;
+  border: 1px solid white;
+  background-color: white;
   margin: 1rem auto 0;
   width: 90%;
 }
 
+.actions-button {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  flex: 0 0 50%;
+  max-width:50%;
+}
+
+.actions-btn {
+  cursor: pointer;
+  display: block;
+  white-space: pre-line;
+  width: 150px;
+  height: 90px;
+  line-height: 1.2;
+  transition: all .5s;
+  border-radius: 3px;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  background-color: white;
+  box-shadow: none;
+  border: 1px solid #18a689;
+  color: #18a689;
+}
+
+.actions-btn:hover, .actions-btn:focus {
+  background-color: #18a689;
+  border-color: #18a689;
+  color: white;
+}
 /* Input fields */
 
 .form-group {
@@ -119,17 +112,17 @@ input[type=text]:focus {
   flex-grow: 10;
 }
 
-/* Tasks */
+/* Fields */
 
-.tasks {
+.fields, .labels {
   padding-top: 1rem;
 }
 
-.tasks:first-child {
+.fields:first-child, .labels:first-child {
   border-top: none;
 }
 
-.task {
+.field, .label {
   padding: 0.5rem;
   border-top: 1px solid #ccdae3;
   border-radius: 1px;
@@ -140,24 +133,32 @@ input[type=text]:focus {
   box-sizing: border-box;
 }
 
-.task:first-of-type {
-  border-top: none;
-}
 
-.task-left {
-  flex-grow: 10;
+.field-left, .label-left {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 70%;
 }
 
-.task-left label {
-  margin-left: 1rem;
+.field-left label, .field-left select, .field-element input, .label-left label {
+  width: 33%;
 }
 
-.task-right {
+.columns {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
 }
 
-.task-edit {
+.columns h5 {
+  width: 33%;
+  text-align: left;
+}
+
+.field-edit, .label-edit {
   width: 100%;
 }
 
@@ -176,4 +177,19 @@ input[type=text]:focus {
 .toast.error {
   background-color: #dc143ce0;
   color: #222222;
+}
+
+.icon-button
+{
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.icon-button:hover {
+  background-color: RoyalBlue;
 }

@@ -93,27 +93,27 @@
   }
 
   /**
-   * A task.
+   * A label.
    */
-  class TaskModel {
-    constructor(id, description) {
+  class LabelModel {
+    constructor(id, labelValue) {
       this._id = id;
-      this._description = description;
+      this._labelValue = labelValue;
       this._timestamp = new Date();
     }
 
     //@formatter:off
     get id() { return this._id; }
-    get description() { return this._description; }
-    set description(description) { this._description = description; }
+    get labelValue() { return this._labelValue; }
+    set labelValue(labelValue) { this._labelValue = labelValue; }
     get timestamp() { return this._timestamp; }
     //@formatter:on
   }
 
   /**
-   * Encapsulates the control and view logics behind a single task.
+   * Encapsulates the control and view logics behind a single label.
    */
-  class TaskComponent extends EventEmitter {
+  class LabelComponent extends EventEmitter {
     constructor(model) {
       super();
       this._model = model;
@@ -129,21 +129,19 @@
 
     init() {
       this._element = document.createElement('div');
-      this._element.className = 'task';
-      this._element.innerHTML = document.querySelector('script#task-template').textContent;
+      this._element.className = 'label';
+      this._element.innerHTML = document.querySelector('script#label-template').textContent;
 
-      const inp = this._element.querySelector('input');
-      inp.id = `task-${this._model.id}`;
-      inp.name = inp.id;
-      const lbl = this._element.querySelector('label');
-      lbl.htmlFor = inp.id;
-      lbl.textContent = this._model.description;
+      const id = `label-${this._model.id}`;
+      const lbl = this._element.querySelector('label[class=label-value]');
+      lbl.htmlFor = id;
+      lbl.textContent = this._model.labelValue;
 
-      const editBtn = this._element.querySelector('.task-right button[name=edit]');
+      const editBtn = this._element.querySelector('.label-right button[name=edit]');
       let hdlr = new Handler('click', editBtn, () => this.edit());
       this._handlers.push(hdlr);
 
-      const compBtn = this._element.querySelector('.task-right button[name=complete]');
+      const compBtn = this._element.querySelector('.label-right button[name=remove]');
       hdlr = new Handler('click', compBtn, () => this.complete());
       this._handlers.push(hdlr);
 
@@ -155,8 +153,8 @@
         this._edit.classList.remove('hidden');
       } else {
         this._edit = document.createElement('div');
-        this._edit.className = 'task-edit';
-        this._edit.innerHTML = document.querySelector('script#task-edit-template').textContent;
+        this._edit.className = 'label-edit';
+        this._edit.innerHTML = document.querySelector('script#label-edit-template').textContent;
 
         const btnSave = this._edit.querySelector('button[name=save]');
         let hdlr = new Handler('click', btnSave, () => this.save());
@@ -168,11 +166,11 @@
       }
 
       const inp = this._edit.querySelector('input');
-      inp.value = this._model.description;
+      inp.value = this._model.labelValue;
 
       const children = [
-        this._element.querySelector('.task-left'),
-        this._element.querySelector('.task-right')];
+        this._element.querySelector('.label-left'),
+        this._element.querySelector('.label-right')];
 
       children.forEach(c => c.classList.add('hidden'));
       this._element.append(this._edit);
@@ -180,44 +178,44 @@
 
     save() {
       if (this._edit) {
-        const newDesc = this._edit.querySelector('input').value || '';
-        if (newDesc.trim()) {
-          this._model.description = newDesc.trim();
+        const newValue = this._edit.querySelector('input').value || '';
+        if (newValue.trim()) {
+          this._model.labelValue = newValue.trim();
         }
         this._update();
-        this._hideEditField();
+        this._hideEditValue();
       }
     }
 
     cancel() {
-      this._hideEditField();
+      this._hideEditValue();
     }
 
     complete() {
       this.emit('completed', this._model);
     }
 
-    _hideEditField() {
+    _hideEditValue() {
       if (this._edit) {
         this._edit.classList.add('hidden');
       }
 
       const children = [
-        this._element.querySelector('.task-left'),
-        this._element.querySelector('.task-right')];
+        this._element.querySelector('.label-left'),
+        this._element.querySelector('.label-right')];
       children.forEach(c => c.classList.remove('hidden'));
     }
 
     _update() {
       if (this._element) {
-        const lbl = this._element.querySelector('label');
-        lbl.textContent = this._model.description;
+        const nameLabel = this._element.querySelector('label[class=label-value]');
+        nameLabel.textContent = this._model.labelValue;
       }
     }
   }
 
   const seq = sequencer();
-  const tasks = [];
+  const labels = [];
 
   function toast(msg, type) {
     let t = document.body.querySelector('.toast');
@@ -230,56 +228,50 @@
     document.body.insertBefore(t, document.body.firstChild);
   }
 
-  function removeTask(task) {
-    const i = tasks.findIndex(t => t.model.id === task.id);
+  function removeLabel(label) {
+    const i = labels.findIndex(t => t.model.id === label.id);
     if (i >= 0) {
-      const {component} = tasks[i];
+      const {component} = labels[i];
       component.destroy();
-      tasks.splice(i, 1);
+      labels.splice(i, 1);
     }
   }
 
-  function taskIdOf(el) {
-    const idStr = el.id.substr(5 /*'task-'.length*/);
+  function valueIdOf(el) {
+    const idStr = el.id.substr(5 /*'label-'.length*/);
     return parseInt(idStr, 10);
   }
 
-  function removeSelectedTasks() {
-    const inps = document.querySelectorAll('.task-left input[type=checkbox]:checked');
-    const tasks = Array.prototype.slice.apply(inps).map(el => ({id: taskIdOf(el)}));
-    tasks.forEach(removeTask);
+  function removeSelectedLabels() {
+    const inps = document.querySelectorAll('.label-left input[type=checkbox]:checked');
+    const labels = Array.prototype.slice.apply(inps).map(el => ({id: valueIdOf(el)}));
+    labels.forEach(removeLabel);
   }
 
-  function addTask(form) {
-    const inp = form.querySelector('input');
-    const desc = (inp.value || '').trim();
-    if (desc !== '') {
-      const root = document.querySelector('.content .panel .tasks');
-      const model = new TaskModel(seq(), desc);
-      const component = new TaskComponent(model);
-      tasks.push({model, component});
+  function addLabel(form) {
+    const inp = form.querySelector('input[name=label-value]');
+    const labelValue = (inp.value || '').trim();
+    if (labelValue !== '') {
+      const root = document.querySelector('.content .panel .labels');
+      const model = new LabelModel(seq(), labelValue);
+      const component = new LabelComponent(model);
+      labels.push({model, component});
       const el = component.init();
       root.appendChild(el);
-      component.on('completed', removeTask);
+      component.on('completed', removeLabel);
     }
   }
 
   function init() {
-    const form = document.forms.namedItem('new-task');
+    const form = document.forms.namedItem('new-label');
     if (!form) {
       toast('Cannot initialize components: no <b>form</b> found', 'error');
     }
 
     form.addEventListener('submit', function ($event) {
       $event.preventDefault();
-      addTask(form);
+      addLabel(form);
       form.reset();
-    });
-
-    const a = document.querySelector('a[data-action=complete-selected]');
-    a.addEventListener('click', function ($event) {
-      $event.preventDefault();
-      removeSelectedTasks();
     });
   }
 
