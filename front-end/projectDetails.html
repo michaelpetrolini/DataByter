@@ -1,0 +1,93 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DataByter</title>
+  <meta name="description" content="SOI2020 Project- DataByter">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="DataByter">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://databyter">
+  <meta property="og:image" content="http://databyter/icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/eos-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+    <body>
+
+        <div class="content">
+
+            <!-- Header -->
+            <div class="header">
+                <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+            </div>
+
+            <div class="header">
+                <h2 class="text-center">Project Details</h2>
+            </div>
+
+            <div class="panel" id="info-panel">
+                <div class="panel-row">
+                    <div class="panel-elem">
+                        <label id="project-name"><b>Name: </b></label>
+                    </div>
+                    <div class="panel-elem">
+                        <label id="project-type"><b>Type: </b></label>
+                    </div>
+                    <div class="panel-elem">
+                        <label id="project-entries"><b>Entries: </b></label>
+                    </div>
+                </div>
+                <div class="panel-row">
+                    <div class="panel-elem">
+                        <label id="project-author"><b>Author: </b></label>
+                    </div>
+                    <div class="panel-elem">
+                        <label id="project-creation"><b>Creation: </b></label>
+                    </div>
+                    <div class="panel-elem">
+                        <label id="project-last-entry"><b>Last Entry: </b></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons-row">
+                <a href="viewProjects.html">
+                    <i class="eos-icons">backspace</i>
+                    <span>Back</span>
+                </a>
+                <button id="delete-project">
+                    <i class="eos-icons">delete</i>
+                    <span>Delete Project</span>
+                </button>
+                <a id="add-entry">
+                    <i class="eos-icons">add_circle</i>
+                    <span>Add a new Entry</span>
+                </a>
+            </div>
+
+            <!-- Panels -->
+            <div class="panel">
+                <table id="entries-table" style="width: 100%;">
+                    <thead>
+                        <tr id="header-row"></tr>
+                    </thead>
+                    <tbody id="entries-rows"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="js/projectDetails.js"></script>
+    </body>
+</html>

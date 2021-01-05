@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DataByter</title>
+  <meta name="description" content="Laboratory #4 of Sistemi Orientati ad Internet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Lab #4 of Sistemi Orientati ad Internet">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://soi-lab04">
+  <meta property="og:image" content="http://soi-lab04/icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/eos-icons.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+<body>
+
+<div class="content">
+
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+  </div>
+
+  <div class="header">
+    <h2 class="text-center">Add a new Entry</h2>
+  </div>
+
+  <a id="back-btn">
+    <i class="eos-icons">backspace</i>
+    <span>Back</span>
+  </a>
+
+  <div class="panel" id="info-panel">
+    <div class="panel-row">
+        <div class="panel-elem">
+            <label id="project-name"><b>Name: </b></label>
+        </div>
+        <div class="panel-elem">
+            <label id="project-type"><b>Type: </b></label>
+        </div>
+        <div class="panel-elem">
+            <label id="project-entries"><b>Entries: </b></label>
+        </div>
+    </div>
+    <div class="panel-row">
+        <div class="panel-elem">
+            <label id="project-author"><b>Author: </b></label>
+        </div>
+        <div class="panel-elem">
+            <label id="project-creation"><b>Creation: </b></label>
+        </div>
+        <div class="panel-elem">
+            <label id="project-last-entry"><b>Last Entry: </b></label>
+        </div>
+    </div>
+</div>
+
+  <!-- Panels -->
+  <div class="panel">
+    <div id="fields"></div>
+  </div>
+
+  <div class="act-btn">
+    <a id="cancel-btn">
+      <i class="eos-icons">backspace</i>
+      <span>Cancel</span>
+    </a>
+    <button id="add-entry">
+      <i class="eos-icons">save</i>
+      <span>Add Entry</span>
+    </button>
+  </div>
+</div>
+<script src="js/addEntry.js"></script>
+</body>
+</html>
