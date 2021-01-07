@@ -136,12 +136,12 @@
       this._element.innerHTML = document.querySelector('script#field-template').textContent;
 
       const id = `field-${this._model.id}`;
-      const lbl = this._element.querySelector('label[class=field-name]');
+      const lbl = this._element.querySelector('label[id=field-name]');
       lbl.htmlFor = id;
       lbl.textContent = this._model.fieldName;
-      const typeLbl = this._element.querySelector('select[name=field-type]');
+      const typeLbl = this._element.querySelector('label[id=field-type]');
       typeLbl.htmlFor = id;
-      typeLbl.value = this._model.fieldType;
+      typeLbl.textContent = this._model.fieldType;
       const isLabel = this._element.querySelector('input[name=isLabel]');
       isLabel.htmlFor = id;
       if(this._model.id === 1){
@@ -224,10 +224,10 @@
 
     _update() {
       if (this._element) {
-        const nameLabel = this._element.querySelector('label[class=field-name]');
+        const nameLabel = this._element.querySelector('label[id=field-name]');
         nameLabel.textContent = this._model.fieldName;
-        const typeLabel = this._element.querySelector('select[name=field-type]');
-        typeLabel.value = this._model.fieldType;
+        const typeLabel = this._element.querySelector('label[id=field-type]');
+        typeLabel.textContent = this._model.fieldType;
       }
     }
   }

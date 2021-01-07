@@ -93,27 +93,27 @@
   }
 
   /**
-   * A task.
+   * A field.
    */
-  class TaskModel {
-    constructor(id, description) {
+  class FieldModel {
+    constructor(id, fieldName) {
       this._id = id;
-      this._description = description;
+      this._fieldName = fieldName;
       this._timestamp = new Date();
     }
 
     //@formatter:off
     get id() { return this._id; }
-    get description() { return this._description; }
-    set description(description) { this._description = description; }
+    get fieldName() { return this._fieldName; }
+    set fieldName(fieldName) { this._fieldName = fieldName; }
     get timestamp() { return this._timestamp; }
     //@formatter:on
   }
 
   /**
-   * Encapsulates the control and view logics behind a single task.
+   * Encapsulates the control and view logics behind a single field.
    */
-  class TaskComponent extends EventEmitter {
+  class FieldComponent extends EventEmitter {
     constructor(model) {
       super();
       this._model = model;
@@ -129,21 +129,24 @@
 
     init() {
       this._element = document.createElement('div');
-      this._element.className = 'task';
-      this._element.innerHTML = document.querySelector('script#task-template').textContent;
+      this._element.className = 'field';
+      this._element.innerHTML = document.querySelector('script#field-template').textContent;
 
-      const inp = this._element.querySelector('input');
-      inp.id = `task-${this._model.id}`;
-      inp.name = inp.id;
-      const lbl = this._element.querySelector('label');
-      lbl.htmlFor = inp.id;
-      lbl.textContent = this._model.description;
+      const id = `field-${this._model.id}`;
+      const lbl = this._element.querySelector('label[id=field-name]');
+      lbl.htmlFor = id;
+      lbl.textContent = this._model.fieldName;
+      const isLabel = this._element.querySelector('input[name=isLabel]');
+      isLabel.htmlFor = id;
+      if(this._model.id === 1){
+        isLabel.checked = true;
+      }
 
-      const editBtn = this._element.querySelector('.task-right button[name=edit]');
+      const editBtn = this._element.querySelector('.field-right button[name=edit]');
       let hdlr = new Handler('click', editBtn, () => this.edit());
       this._handlers.push(hdlr);
 
-      const compBtn = this._element.querySelector('.task-right button[name=complete]');
+      const compBtn = this._element.querySelector('.field-right button[name=remove]');
       hdlr = new Handler('click', compBtn, () => this.complete());
       this._handlers.push(hdlr);
 
@@ -155,8 +158,8 @@
         this._edit.classList.remove('hidden');
       } else {
         this._edit = document.createElement('div');
-        this._edit.className = 'task-edit';
-        this._edit.innerHTML = document.querySelector('script#task-edit-template').textContent;
+        this._edit.className = 'field-edit';
+        this._edit.innerHTML = document.querySelector('script#field-edit-template').textContent;
 
         const btnSave = this._edit.querySelector('button[name=save]');
         let hdlr = new Handler('click', btnSave, () => this.save());
@@ -168,11 +171,11 @@
       }
 
       const inp = this._edit.querySelector('input');
-      inp.value = this._model.description;
+      inp.value = this._model.fieldName;
 
       const children = [
-        this._element.querySelector('.task-left'),
-        this._element.querySelector('.task-right')];
+        this._element.querySelector('.field-left'),
+        this._element.querySelector('.field-right')];
 
       children.forEach(c => c.classList.add('hidden'));
       this._element.append(this._edit);
@@ -180,44 +183,44 @@
 
     save() {
       if (this._edit) {
-        const newDesc = this._edit.querySelector('input').value || '';
-        if (newDesc.trim()) {
-          this._model.description = newDesc.trim();
+        const newName = this._edit.querySelector('input').value || '';
+        if (newName.trim()) {
+          this._model.fieldName = newName.trim();
         }
         this._update();
-        this._hideEditField();
+        this._hideEditfield();
       }
     }
 
     cancel() {
-      this._hideEditField();
+      this._hideEditfield();
     }
 
     complete() {
       this.emit('completed', this._model);
     }
 
-    _hideEditField() {
+    _hideEditfield() {
       if (this._edit) {
         this._edit.classList.add('hidden');
       }
 
       const children = [
-        this._element.querySelector('.task-left'),
-        this._element.querySelector('.task-right')];
+        this._element.querySelector('.field-left'),
+        this._element.querySelector('.field-right')];
       children.forEach(c => c.classList.remove('hidden'));
     }
 
     _update() {
       if (this._element) {
-        const lbl = this._element.querySelector('label');
-        lbl.textContent = this._model.description;
+        const nameLabel = this._element.querySelector('label[id=field-name]');
+        nameLabel.textContent = this._model.fieldName;
       }
     }
   }
 
   const seq = sequencer();
-  const tasks = [];
+  const fields = [];
 
   function toast(msg, type) {
     let t = document.body.querySelector('.toast');
@@ -230,56 +233,50 @@
     document.body.insertBefore(t, document.body.firstChild);
   }
 
-  function removeTask(task) {
-    const i = tasks.findIndex(t => t.model.id === task.id);
+  function removeField(field) {
+    const i = fields.findIndex(t => t.model.id === field.id);
     if (i >= 0) {
-      const {component} = tasks[i];
+      const {component} = fields[i];
       component.destroy();
-      tasks.splice(i, 1);
+      fields.splice(i, 1);
     }
   }
 
-  function taskIdOf(el) {
-    const idStr = el.id.substr(5 /*'task-'.length*/);
+  function fieldIdOf(el) {
+    const idStr = el.id.substr(5 /*'field-'.length*/);
     return parseInt(idStr, 10);
   }
 
-  function removeSelectedTasks() {
-    const inps = document.querySelectorAll('.task-left input[type=checkbox]:checked');
-    const tasks = Array.prototype.slice.apply(inps).map(el => ({id: taskIdOf(el)}));
-    tasks.forEach(removeTask);
+  function removeSelectedFields() {
+    const inps = document.querySelectorAll('.field-left input[type=checkbox]:checked');
+    const fields = Array.prototype.slice.apply(inps).map(el => ({id: fieldIdOf(el)}));
+    fields.forEach(removeField);
   }
 
-  function addTask(form) {
-    const inp = form.querySelector('input');
-    const desc = (inp.value || '').trim();
-    if (desc !== '') {
-      const root = document.querySelector('.content .panel .tasks');
-      const model = new TaskModel(seq(), desc);
-      const component = new TaskComponent(model);
-      tasks.push({model, component});
+  function addField(form) {
+    const inp = form.querySelector('input[name=field-name]');
+    const fieldName = (inp.value || '').trim();
+    if (fieldName !== '') {
+      const root = document.querySelector('.content .panel .fields');
+      const model = new FieldModel(seq(), fieldName);
+      const component = new FieldComponent(model);
+      fields.push({model, component});
       const el = component.init();
       root.appendChild(el);
-      component.on('completed', removeTask);
+      component.on('completed', removeField);
     }
   }
 
   function init() {
-    const form = document.forms.namedItem('new-task');
+    const form = document.forms.namedItem('new-field');
     if (!form) {
       toast('Cannot initialize components: no <b>form</b> found', 'error');
     }
 
     form.addEventListener('submit', function ($event) {
       $event.preventDefault();
-      addTask(form);
+      addField(form);
       form.reset();
-    });
-
-    const a = document.querySelector('a[data-action=complete-selected]');
-    a.addEventListener('click', function ($event) {
-      $event.preventDefault();
-      removeSelectedTasks();
     });
   }
 

@@ -27,8 +27,8 @@ const options = opts();
 function init(app) {
     app.use(compression());
     app.use(methodOverride());
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json({limit: '50mb'}));
+    app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
     // sets the correlation id of any incoming requests
     app.use((req, res, next) => {

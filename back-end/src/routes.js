@@ -117,7 +117,7 @@ function routes(app) {
                 if (err) throw err;
                 const getPromise = () => {
                     return new Promise((resolve, reject) => {
-                        dbo.collection("entries").find({"projectId": projectId}).toArray(function (err, entries) {
+                        dbo.collection("entries").find({"projectId": projectId, isActive: true}).toArray(function (err, entries) {
                             err ? reject(err) : resolve(entries);
                         });
                     });
@@ -135,6 +135,71 @@ function routes(app) {
                         results: result
                     });
                  });
+            });
+        });
+    });
+
+    app.get('/entry', (req, resp) => {
+        const projectId = parseInt(req.query.projectId);
+        const entryId = parseInt(req.query.entryId);
+        console.debug('Retrieving entry');
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            dbo.collection("entries").findOne({projectId: projectId, entryId: entryId, isActive: true}, function(err, entry) {
+                if (err) throw err;
+                db.close();
+                console.log(entry);
+                resp.json({
+                    entry: entry
+                });
+            });
+        });
+    });
+
+    app.get('/entryHistory', (req, resp) => {
+        console.debug('Retrieving entry history');
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            const projectId = parseInt(req.query.projectId);
+            const entryId = parseInt(req.query.entryId);
+            const getPromise = () => {
+                return new Promise((resolve, reject) => {
+                    dbo.collection("entries").find({projectId: projectId, entryId: entryId}).sort({version: -1}).toArray(function (err, entries) {
+                        err ? reject(err) : resolve(entries);
+                    });
+                });
+            };
+            const execGetPromise = async () => {
+            
+                var result = await (getPromise());
+                return result;
+                };
+                execGetPromise().then(function(result) {          
+                db.close();
+                resp.json({
+                    total: result.length,
+                    results: result
+                });
+                });
+        });
+    });
+
+    app.post('/checkUser', (req, resp) => {
+        const username = req.body.username;
+        const password = req.body.password;
+        console.debug('Checking if user is registered');
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            dbo.collection("users").countDocuments({username: username, password: password}, function(err, result) {
+                if (err) throw err;
+                db.close();
+                const canAccess = result == 1? true: false;
+                resp.json({
+                    canAccess: canAccess
+                });
             });
         });
     });
@@ -161,6 +226,8 @@ function routes(app) {
               newEntry.projectId = result.value.projectId;
               newEntry.entryId = result.value.entryId;
               newEntry.creationDate = today;
+              newEntry.version = 0;
+              newEntry.isActive = true;
               dbo.collection("entries").insertOne(newEntry, function(err, result) {
                 if (err) throw err;
                 console.log("Entry saved successfully");
@@ -188,7 +255,7 @@ function routes(app) {
             dbo.collection("id-manager").findOneAndUpdate(query, increment, function(err, result) {
               if (err) throw err;
               newProject.projectId = result.value.id;
-              newProject.entryId = 0;
+              newProject.entryId = 1;
               dbo.collection("projects").insertOne(newProject, function(err, result) {
                 if (err) throw err;
                 console.log("Project saved successfully");
@@ -200,39 +267,40 @@ function routes(app) {
         });
     });
 
-    app.put('/task/:id', (req, resp) => {
-        const {description} = req.body;
-        const idRaw = req.params.id;
-        console.debug('Attempting to update task', {id: idRaw, description});
-
-        if (!isNonBlank(description)) {
+    app.put('/entry', (req, resp) => {
+        const newEntry = req.body;
+        const projectId = parseInt(req.query.projectId);
+        const entryId = parseInt(req.query.entryId);
+        console.debug('Attempting to update a entry', newEntry);
+        /*
+        if (!isNonBlank(newProject.pName) || newProject.fields.length === 0 || newProject.labels.length === 0) {
             resp.status(400);
-            resp.json({error: 'Missing task description'});
+            resp.json({error: 'Error in the format of the project'});
             return;
         }
-        if (description.trim().length > 50) {
-            resp.status(400);
-            resp.json({error: 'Too long task description'});
-            return;
-        }
-        if (!isInteger(idRaw)) {
-            resp.status(400);
-            resp.json({error: 'Invalid task identifier'});
-            return;
-        }
-        const id = parseInt(idRaw, 10);
-        const task = tasks.find(t => t.id === id);
-        if (!task) {
-            resp.status(404);
-            resp.json({error: 'Task not found'});
-            return;
-        }
-
-        task.description = description.trim();
-        resp.status(200);
-        console.info('Task successfully updated', {task});
-
-        resp.json(toDTO(task));
+        */
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            const query = {projectId: projectId, entryId: entryId, isActive: true};
+            const today = new Date().toISOString().slice(0,10);
+            const update = {$set:{isActive: false}};
+            dbo.collection("entries").findOneAndUpdate(query, update, function(err, result) {
+              if (err) throw err;
+              newEntry.projectId = result.value.projectId;
+              newEntry.entryId = result.value.entryId;
+              newEntry.creationDate = today;
+              newEntry.version = parseInt(result.value.version) + 1;
+              newEntry.isActive = true;
+              dbo.collection("entries").insertOne(newEntry, function(err, result) {
+                if (err) throw err;
+                console.log("Entry updated successfully");
+                db.close();
+                resp.status(201);
+                resp.json(newEntry);
+              });
+            });
+        });
     });
 
     app.delete('/entry', (req, resp) => {
@@ -243,7 +311,7 @@ function routes(app) {
             if (err) throw err;
             const dbo = db.db("databyter");
             const query = {projectId: projectId, entryId: entryId};
-            dbo.collection("entries").deleteOne(query, function(err, result) {
+            dbo.collection("entries").deleteMany(query, function(err, result) {
                 if (err) throw err;
                 console.info('Entry successfully deleted');
                 resp.status(200);

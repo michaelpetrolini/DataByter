@@ -365,49 +365,21 @@
     return parseInt(idStr, 10);
   }
 
-  async function populateProjectDetails(infoPanel, table, projectId){
-    const resp = await client.get("entries", {id: projectId});
-    const projectInfo = resp.header;
-    const nameLbl = infoPanel.querySelector('label[id=project-name]');
-    const nameVal = document.createElement('label');
-    nameVal.textContent = projectInfo.pName;
-    nameLbl.after(nameVal);
-    const typeLbl = infoPanel.querySelector('label[id=project-type]');
-    const typeVal = document.createElement('label');
-    typeVal.textContent = projectInfo.pType;
-    typeLbl.after(typeVal);
-    const entriesLbl = infoPanel.querySelector('label[id=project-entries]');
-    const entriesVal = document.createElement('label');
-    entriesVal.textContent = resp.total;
-    entriesLbl.after(entriesVal);
-    const authorLbl = infoPanel.querySelector('label[id=project-author]');
-    const authorVal = document.createElement('label');
-    authorVal.textContent = projectInfo.pAuthor;
-    authorLbl.after(authorVal);
-    const creationLbl = infoPanel.querySelector('label[id=project-creation]');
-    const creationVal = document.createElement('label');
-    creationVal.textContent = projectInfo.creationDate;
-    creationLbl.after(creationVal);
-    const lastLbl = infoPanel.querySelector('label[id=project-last-entry]');
-    const lastVal = document.createElement('label');
-    lastVal.textContent = projectInfo.lastEntry;
-    lastLbl.after(lastVal);
+  async function populateEntryDetails(table, projectId, entryId){
+    const resp = await client.get("entryHistory", {projectId: projectId, entryId: entryId});
     const headerRow = table.querySelector('tr[id=header-row]');
-    projectInfo.fields.forEach(field => {
+    resp.results[0].fields.forEach(field => {
         const hElem = document.createElement('th');
-        hElem.textContent = field.name;
+        hElem.textContent = field.field;
         headerRow.appendChild(hElem);
     });
-    const hActions = document.createElement('th');
-    hActions.textContent = "Actions";
-    headerRow.appendChild(hActions);
 
     const tBody = table.querySelector('tbody[id=entries-rows]');
     resp.results.forEach(entry => {
       const newRow = tBody.insertRow();
       entry.fields.forEach(field => {
         const newCell = newRow.insertCell();
-        switch(projectInfo.pType){
+        switch(entry.pType){
           case "Text":
             newCell.innerHTML = field.value;
             break;
@@ -416,57 +388,33 @@
               newCell.innerHTML = field.value;
             } else {
               const img = document.createElement('img');
-              img.style.maxBlockSize = "100px";
+              img.style.maxBlockSize = "75px";
               img.src = field.value;
               newCell.appendChild(img);
             }
         }
       });
-      const pActions = newRow.insertCell();
-      const viewAnchor = document.createElement('a');
-      viewAnchor.href = "entryHistory.html?projectId=" + entry.projectId + "&entryId=" + entry.entryId;
-      const viewIcon = document.createElement('i');
-      viewIcon.className = "eos-icons";
-      viewIcon.appendChild(document.createTextNode("search"));
-      viewAnchor.appendChild(viewIcon);
-      pActions.appendChild(viewAnchor);
-      const anchor = document.createElement('a');
-      anchor.href = "updateEntry.html?projectId=" + entry.projectId + "&entryId=" + entry.entryId;
-      const editIcon = document.createElement('i');
-      editIcon.className = "eos-icons";
-      editIcon.appendChild(document.createTextNode("edit"));
-      anchor.appendChild(editIcon);
-      pActions.appendChild(anchor);
-      const delButton = document.createElement('button');
-      const delIcon = document.createElement('i');
-      delIcon.className = "eos-icons";
-      delIcon.appendChild(document.createTextNode("delete"));
-      delButton.appendChild(delIcon);
-      delButton.addEventListener('click', async function() {
-        await client.del("entry",{projectId: entry.projectId, entryId: entry.entryId});
-        location.reload();
-      });
-      pActions.appendChild(delButton);
     });
     
   }
 
   async function init() {
+    const projectId = new URLSearchParams(window.location.search).get('projectId');
+    const entryId = new URLSearchParams(window.location.search).get('entryId');
     window.addEventListener('load', function ($event) {
-      const projectId = new URLSearchParams(window.location.search).get('projectId');
-      const infoPanel = document.querySelector("div[id=info-panel]");
-      const table = document.querySelector("table[id=entries-table]");
-      $event.preventDefault();
-      const addBtn = document.querySelector("a[id=add-entry]");
-      addBtn.href = "addEntry.html?projectId=" + projectId;
-      populateProjectDetails(infoPanel, table, projectId);
+        const table = document.querySelector("table[id=entries-table]");
+        $event.preventDefault();
+        const addBtn = document.querySelector("a[id=update-entry]");
+        addBtn.href = "updateEntry.html?projectId=" + projectId + "&entryId=" + entryId;
+        const backBtn = document.querySelector("a[id=back]");
+        backBtn.href = "projectDetails.html?projectId=" + projectId;
+        populateEntryDetails(table, projectId, entryId);
     });
 
-    const delProjectBtn = document.querySelector('button[id=delete-project]');
+    const delProjectBtn = document.querySelector('button[id=delete-entry]');
     delProjectBtn.addEventListener('click', async function(){
-      const projectId = new URLSearchParams(window.location.search).get('projectId');
-      await client.del("project", {projectId: projectId});
-      window.location = "/viewProjects.html";
+      await client.del("entry", {projectId: projectId, entryId: entryId});
+      window.location = "/projectDetails.html?projectId=" + projectId;
     });
   }
   init();

@@ -377,7 +377,7 @@
       pType.innerHTML = project.pType;
       let pActions = newRow.insertCell();
       const anchor = document.createElement('a');
-      anchor.href = "projectDetails.html?id=" + project.projectId;
+      anchor.href = "projectDetails.html?projectId=" + project.projectId;
       const button = document.createElement('i');
       button.className = "eos-icons";
       button.appendChild(document.createTextNode("search"));

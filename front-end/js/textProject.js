@@ -96,15 +96,16 @@
    * A task.
    */
   class ProjectModel {
-    constructor(pName, description, pType, fields, labels) {
+    constructor(pName, description, pType, sTarget, fields, labels) {
       this._pName = pName;
       this._description = description;
       this._pType = pType;
+      this._sTarget = parseInt(sTarget);
       this._fields = [];
       this._labels = [];
       fields.forEach((field)=>{
-        const fieldName = field.querySelector('label[class=field-name]').textContent;
-        const fieldType = field.querySelector('select[name=field-type]').value;
+        const fieldName = field.querySelector('label[id=field-name]').textContent;
+        const fieldType = field.querySelector('label[id=field-type]').textContent;
         const labelFlag = field.querySelector('input[name=isLabel]').checked? true: false;
         this._fields.push({name: fieldName, type: fieldType, isLabel: labelFlag});
     });
@@ -112,13 +113,14 @@
         const labelValue = label.querySelector('label[class=label-value]').textContent;
         this._labels.push(labelValue);
     });
-      this._creationDate = new Date();
+      this._creationDate = new Date().toISOString().slice(0,10);
     }
 
     //@formatter:off
     get pName() { return this._pName; }
     get description() { return this._description; }
     get pType() { return this._pType; }
+    get sTarget() { return this._sTarget }
     get fields() { return this._fields; }
     get labels() { return this._labels; }
     get creationDate() { return this._creationDate; }
@@ -171,6 +173,9 @@
 
   function handleJsonResponse(req, resolve, reject) {
     if (req.readyState === XMLHttpRequest.DONE) {
+      console.debug("status: " + req.status);
+      console.debug("responseText: " + req.responseText);
+      console.debug("content: " + req.getResponseHeader('Content-type'));
       // Everything is good, the response was received.
       if (req.status === 200 || req.status === 201) {
         const hdr = req.getResponseHeader('Content-type');
@@ -298,13 +303,13 @@
    * A task that can be synchronized with the REST API.
    */
   class RestProjectModel extends ProjectModel {
-    constructor(pName, description, pType, fields, labels, client) {
-      super(pName, description, pType, fields, labels);
+    constructor(pName, description, pType, sTarget, fields, labels, client) {
+      super(pName, description, pType, sTarget, fields, labels);
       this._client = client;
     }
 
     toDto() {
-      return {pName: this.pName, description: this.description, pType: this.pType, fields: this.fields, labels: this.labels, creationDate: this.creationDate};
+      return {pName: this.pName, description: this.description, pType: this.pType, sizeTarget: this.sTarget, fields: this.fields, labels: this.labels, creationDate: this.creationDate};
     }
 
     async create() {
@@ -365,109 +370,46 @@
     return parseInt(idStr, 10);
   }
 
-  async function populateProjectDetails(infoPanel, table, projectId){
-    const resp = await client.get("entries", {id: projectId});
-    const projectInfo = resp.header;
-    const nameLbl = infoPanel.querySelector('label[id=project-name]');
-    const nameVal = document.createElement('label');
-    nameVal.textContent = projectInfo.pName;
-    nameLbl.after(nameVal);
-    const typeLbl = infoPanel.querySelector('label[id=project-type]');
-    const typeVal = document.createElement('label');
-    typeVal.textContent = projectInfo.pType;
-    typeLbl.after(typeVal);
-    const entriesLbl = infoPanel.querySelector('label[id=project-entries]');
-    const entriesVal = document.createElement('label');
-    entriesVal.textContent = resp.total;
-    entriesLbl.after(entriesVal);
-    const authorLbl = infoPanel.querySelector('label[id=project-author]');
-    const authorVal = document.createElement('label');
-    authorVal.textContent = projectInfo.pAuthor;
-    authorLbl.after(authorVal);
-    const creationLbl = infoPanel.querySelector('label[id=project-creation]');
-    const creationVal = document.createElement('label');
-    creationVal.textContent = projectInfo.creationDate;
-    creationLbl.after(creationVal);
-    const lastLbl = infoPanel.querySelector('label[id=project-last-entry]');
-    const lastVal = document.createElement('label');
-    lastVal.textContent = projectInfo.lastEntry;
-    lastLbl.after(lastVal);
-    const headerRow = table.querySelector('tr[id=header-row]');
-    projectInfo.fields.forEach(field => {
-        const hElem = document.createElement('th');
-        hElem.textContent = field.name;
-        headerRow.appendChild(hElem);
-    });
-    const hActions = document.createElement('th');
-    hActions.textContent = "Actions";
-    headerRow.appendChild(hActions);
-
-    const tBody = table.querySelector('tbody[id=entries-rows]');
-    resp.results.forEach(entry => {
-      const newRow = tBody.insertRow();
-      entry.fields.forEach(field => {
-        const newCell = newRow.insertCell();
-        switch(projectInfo.pType){
-          case "Text":
-            newCell.innerHTML = field.value;
-            break;
-          case "Image":
-            if(field.isLabel === true){
-              newCell.innerHTML = field.value;
-            } else {
-              const img = document.createElement('img');
-              img.style.maxBlockSize = "100px";
-              img.src = field.value;
-              newCell.appendChild(img);
-            }
-        }
-      });
-      const pActions = newRow.insertCell();
-      const viewAnchor = document.createElement('a');
-      viewAnchor.href = "entryHistory.html?projectId=" + entry.projectId + "&entryId=" + entry.entryId;
-      const viewIcon = document.createElement('i');
-      viewIcon.className = "eos-icons";
-      viewIcon.appendChild(document.createTextNode("search"));
-      viewAnchor.appendChild(viewIcon);
-      pActions.appendChild(viewAnchor);
-      const anchor = document.createElement('a');
-      anchor.href = "updateEntry.html?projectId=" + entry.projectId + "&entryId=" + entry.entryId;
-      const editIcon = document.createElement('i');
-      editIcon.className = "eos-icons";
-      editIcon.appendChild(document.createTextNode("edit"));
-      anchor.appendChild(editIcon);
-      pActions.appendChild(anchor);
-      const delButton = document.createElement('button');
-      const delIcon = document.createElement('i');
-      delIcon.className = "eos-icons";
-      delIcon.appendChild(document.createTextNode("delete"));
-      delButton.appendChild(delIcon);
-      delButton.addEventListener('click', async function() {
-        await client.del("entry",{projectId: entry.projectId, entryId: entry.entryId});
-        location.reload();
-      });
-      pActions.appendChild(delButton);
-    });
-    
+  async function saveProject() {
+    const inp = document.querySelector('label[id=name]');
+    const pName = (inp.textContent || '').trim();
+    if (pName) {
+      console.log(`Saving new project '${pName}'...`);
+      const description = document.querySelector('label[id=description]').textContent;
+      const pType = "Text";
+      const sTarget = document.querySelector('label[id=size-target]').textContent;
+      const fields = document.querySelectorAll('.field-left');
+      const labels = document.querySelectorAll('.label-left');
+      const model = new RestProjectModel(pName, description, pType, sTarget, fields, labels, client);
+      await model.create();
+      console.log('Project successfully saved', {model: model.toDto()});
+      window.location = '/';
+    }
   }
 
   async function init() {
-    window.addEventListener('load', function ($event) {
-      const projectId = new URLSearchParams(window.location.search).get('projectId');
-      const infoPanel = document.querySelector("div[id=info-panel]");
-      const table = document.querySelector("table[id=entries-table]");
-      $event.preventDefault();
-      const addBtn = document.querySelector("a[id=add-entry]");
-      addBtn.href = "addEntry.html?projectId=" + projectId;
-      populateProjectDetails(infoPanel, table, projectId);
+    window.addEventListener('load', function(){
+      const pName = localStorage.getItem("name");
+      const nameLbl = document.querySelector("label[id=name]");
+      nameLbl.textContent = pName;
+      localStorage.removeItem("name");
+      const pDesc = localStorage.getItem("description");
+      const descLbl = document.querySelector("label[id=description]");
+      descLbl.textContent = pDesc;
+      localStorage.removeItem("description");
+      const sTarget = localStorage.getItem("size-target");
+      const targetLbl = document.querySelector("label[id=size-target]");
+      targetLbl.textContent = sTarget;
+      localStorage.removeItem("size-target");
     });
-
-    const delProjectBtn = document.querySelector('button[id=delete-project]');
-    delProjectBtn.addEventListener('click', async function(){
-      const projectId = new URLSearchParams(window.location.search).get('projectId');
-      await client.del("project", {projectId: projectId});
-      window.location = "/viewProjects.html";
+    const button = document.getElementById('save-project')
+    button.addEventListener('click', function ($event) {
+      $event.preventDefault();
+      saveProject();
     });
   }
+
+
   init();
+
 })();

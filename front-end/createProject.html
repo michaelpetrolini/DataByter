@@ -9,10 +9,10 @@
   <meta property="og:title" content="Lab #4 of Sistemi Orientati ad Internet">
   <meta property="og:type" content="website">
   <meta property="og:url" content="http://soi-lab04">
-  <meta property="og:image" content="http://soi-lab04/icon.png">
+  <meta property="og:image" content="http://soi-lab04/logo.png">
 
   <link rel="manifest" href="site.webmanifest">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" href="logo.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
@@ -36,7 +36,7 @@
     <h2 class="text-center">Create a new Project</h2>
   </div>
 
-  <a href="/">
+  <a href="viewProjects.html">
     <i class="eos-icons">backspace</i>
     <span>Back</span>
   </a>
@@ -51,7 +51,7 @@
       <div class="ibox-elem">
         <label>Description:</label>
         <input type="text" class="form-control" id="description" value="">
-    </div>
+      </div>
       <div class="ibox-elem">
         <label>Type:</label>
         <input type="radio" id="text" name="type" value="text" checked="checked">
@@ -59,52 +59,11 @@
         <input type="radio" id="image" name="type" value="image">
         <label for="image">Image</label>
       </div>
-    </div>
-  </div>
-
-  <!-- Panels -->
-  <div class="panel">
-    <form name="new-field">
-      <div class="form-group">
-        <div class="input-group">
-          <input name="field-name" type="text" value="" maxlength="15">
-          <select name="field-type">
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="boolean">Boolean</option>
-            <option value="date">Date</option>
-          </select>
-          <button type="submit">
-            <i class="eos-icons">add</i>
-            <span>Add</span>
-          </button>
-        </div>
-      </div>
-    </form>
-    <hr style="width:100%;text-align:left;margin-left:0">
-    <div class="fields">
-      <div class="columns">
-        <h5>Field</h5>
-        <h5>Type</h5>
-        <h5>Label</h5>
+      <div class="ibox-elem">
+        <label>Size Target:</label>
+        <input type="number" class="form-control" id="size-target" value="0">
       </div>
     </div>
-  </div>
-
-  <div class="panel">
-    <form name="new-label">
-      <div class="form-group">
-        <div class="input-group">
-          <input name="label-value" type="text" value="" maxlength="15">
-          <button type="submit">
-            <i class="eos-icons">add</i>
-            <span>Add</span>
-          </button>
-        </div>
-      </div>
-    </form>
-    <hr style="width:100%;text-align:left;margin-left:0">
-    <div class="labels"></div>
   </div>
 
   <div class="act-btn">
@@ -112,73 +71,37 @@
       <i class="eos-icons">backspace</i>
       <span>Cancel</span>
     </a>
-    <button id="save-project">
+    <button id="project-specs">
       <i class="eos-icons">save</i>
-      <span>Save Project</span>
+      <span>Project Specifics</span>
     </button>
   </div>
 </div>
 
-<script type="text/html" id="field-template">
-  <div class="field-left">
-    <label for="" class="field-name"></label>
-    <select for="" name="field-type" disabled>
-      <option value="string">String</option>
-      <option value="number">Number</option>
-      <option value="boolean">Boolean</option>
-      <option value="date">Date</option>
-    </select>
-    <input for="" type="radio" name="isLabel">
-  </div>
-
-  <div class="field-right">
-    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
-    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
-  </div>
+<script>
+  const specsButton = document.querySelector("button[id=project-specs]");
+  specsButton.addEventListener("click", function() {
+    const pName = document.querySelector("input[id=name]").value.trim();
+    if(pName){
+      const pDesc = document.querySelector("input[id=description]").value;
+      const pType = document.querySelector("input[name=type]:checked").value;
+      const sTarget = document.querySelector("input[id=size-target]").value;
+      localStorage.setItem("name", pName);
+      localStorage.setItem("description", pDesc);
+      localStorage.setItem("size-target", sTarget);
+      switch(pType){
+        case "text":
+          window.location = "/textProject.html";
+          break;
+        case "image":
+          window.location = "/imageProject.html";
+      }
+      
+    }
+  });
 </script>
-
-<script type="text/html" id="field-edit-template">
-  <div class="form-group">
-    <div class="input-group">
-      <input type="text" maxlength="15">
-      <select name="field-type">
-        <option value="string">String</option>
-        <option value="number">Number</option>
-        <option value="boolean">Boolean</option>
-        <option value="date">Date</option>
-      </select>
-      <button name="save" class="primary"><i class="eos-icons">save</i></button>
-      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
-    </div>
-  </div>
-</script>
-
-<script type="text/html" id="label-template">
-  <div class="label-left">
-    <label for="" class="label-value"></label>
-  </div>
-
-  <div class="label-right">
-    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
-    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
-  </div>
-</script>
-
-<script type="text/html" id="label-edit-template">
-  <div class="form-group">
-    <div class="input-group">
-      <input type="text" maxlength="15">
-      <button name="save" class="primary"><i class="eos-icons">save</i></button>
-      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
-    </div>
-  </div>
-</script>
-
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="js/plugins.js"></script>
-<script src="js/manageField.js"></script>
-<script src="js/manageLabel.js"></script>
-<script src="js/manageProject.js"></script>
 
 </body>
 </html>
