@@ -484,11 +484,11 @@
   }
 
   async function updateEntry(fieldsDiv, projectId, entryId){
-      const entry = {fields: []}
       const fieldsList = fieldsDiv.querySelectorAll('div[class=field-container]');
       const infoPanel = document.querySelector("div[id=info-panel]");
       const pType = infoPanel.querySelector('label[id=project-type]').nextSibling.textContent;
-      entry.pType = pType;
+      const author = sessionStorage.getItem('username');
+      const entry = {author: author, pType: pType, fields: []}
       fieldsList.forEach(fContainer => {
         const entryElem = {};
         if(fContainer.id === "label"){
@@ -555,6 +555,12 @@
         const projectId = new URLSearchParams(window.location.search).get('projectId');
         const entryId = new URLSearchParams(window.location.search).get('entryId');
         updateEntry(fieldsDiv, projectId, entryId);
+    });
+
+    const logOutButton = document.querySelector('button[id=logout]');
+    logOutButton.addEventListener('click', function(){
+      sessionStorage.removeItem('username');
+      window.location = '/';
     });
   }
 

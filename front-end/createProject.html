@@ -26,7 +26,7 @@
 <body>
 
 <div class="content">
-
+  <button id="logout">Log out</button>
   <!-- Header -->
   <div class="header">
     <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
@@ -79,6 +79,19 @@
 </div>
 
 <script>
+    function toast(msg, type) {
+    let t = document.body.querySelector('.toast');
+    if (t) {
+      t.remove();
+    }
+    t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = msg;
+    document.body.insertBefore(t, document.body.firstChild);
+  }
+</script>
+
+<script>
   const specsButton = document.querySelector("button[id=project-specs]");
   specsButton.addEventListener("click", function() {
     const pName = document.querySelector("input[id=name]").value.trim();
@@ -86,9 +99,9 @@
       const pDesc = document.querySelector("input[id=description]").value;
       const pType = document.querySelector("input[name=type]:checked").value;
       const sTarget = document.querySelector("input[id=size-target]").value;
-      localStorage.setItem("name", pName);
-      localStorage.setItem("description", pDesc);
-      localStorage.setItem("size-target", sTarget);
+      sessionStorage.setItem("name", pName);
+      sessionStorage.setItem("description", pDesc);
+      sessionStorage.setItem("size-target", sTarget);
       switch(pType){
         case "text":
           window.location = "/textProject.html";
@@ -96,8 +109,17 @@
         case "image":
           window.location = "/imageProject.html";
       }
-      
+    } else {
+      toast('You must first enter the project name', 'error');
     }
+  });
+</script>
+
+<script>
+  const logOutButton = document.querySelector('button[id=logout]');
+  logOutButton.addEventListener('click', function(){
+    sessionStorage.removeItem('username');
+    window.location = '/';
   });
 </script>
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>

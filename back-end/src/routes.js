@@ -71,7 +71,7 @@ function routes(app) {
             const dbo = db.db("databyter");
             const getPromise = () => {
                 return new Promise((resolve, reject) => {
-                    dbo.collection("projects").find({}).toArray(function (err, result) {
+                    dbo.collection("projects").find({}).sort({projectId: 1}).toArray(function (err, result) {
                         err ? reject(err) : resolve(result);
                     });
                 });
@@ -113,11 +113,11 @@ function routes(app) {
             if (err) throw err;
             const dbo = db.db("databyter");
             const projectId = parseInt(req.query.id);
-            dbo.collection("projects").findOne({"projectId": projectId}, function(err, projectHeader) {
+            dbo.collection("projects").findOne({projectId: projectId}, function(err, projectHeader) {
                 if (err) throw err;
                 const getPromise = () => {
                     return new Promise((resolve, reject) => {
-                        dbo.collection("entries").find({"projectId": projectId, isActive: true}).toArray(function (err, entries) {
+                        dbo.collection("entries").find({projectId: projectId, isActive: true}).sort({entryId: 1}).toArray(function (err, entries) {
                             err ? reject(err) : resolve(entries);
                         });
                     });
@@ -200,6 +200,49 @@ function routes(app) {
                 resp.json({
                     canAccess: canAccess
                 });
+            });
+        });
+    });
+
+    app.post('/registerUser', (req, resp) => {
+        const email = req.body.email;
+        const username = req.body.username;
+        const password = req.body.password;
+        const passwordCheck = req.body.passwordCheck;
+        console.debug('Trying to register a new user');
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            dbo.collection("users").countDocuments({email: email}, function(err, result) {
+                if (err) throw err;
+                if(result !== 0){
+                    resp.json({
+                        status: false,
+                        errorCode: 1
+                    });
+                } else {
+                    dbo.collection("users").countDocuments({username: username}, function(err, result) {
+                        if (err) throw err;
+                        if(result !== 0){
+                            resp.json({
+                                status: false,
+                                errorCode: 2
+                            });
+                        } else {
+                            if(password !== passwordCheck){
+                                resp.json({
+                                    status: false,
+                                    errorCode: 3
+                                });
+                            } else {
+                                dbo.collection("users").insertOne({email: email, username: username, password: password}, function(err, result) {
+                                    if (err) throw err;
+                                    resp.json({status: true});
+                                });
+                            }
+                        }
+                    });
+                }
             });
         });
     });
@@ -299,6 +342,44 @@ function routes(app) {
                 resp.status(201);
                 resp.json(newEntry);
               });
+            });
+        });
+    });
+
+    app.put('/changePassword', (req, resp) => {
+        const email = req.body.email;
+        const username = req.body.username;
+        const password = req.body.password;
+        const passwordCheck = req.body.passwordCheck;
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            dbo.collection("users").countDocuments({username: username, email: email}, function(err, result) {
+                if (err) throw err;
+                if(result === 0){
+                    db.close();
+                    resp.json({
+                        status: false,
+                        errorCode: 1
+                    });
+                } else {
+                    if(password !== passwordCheck){
+                        db.close();
+                        resp.json({
+                            status: false,
+                            errorCode: 2
+                        });
+                    } else {
+
+                    }
+                    const query = {username: username, password: password}
+                    const update = {$set: {password: password}}
+                    dbo.collection("users").updateOne(query, update, function(err, result){
+                        if (err) throw err;
+                        db.close();
+                        resp.json({status: true})
+                    });
+                }
             });
         });
     });

@@ -373,7 +373,12 @@
         hElem.textContent = field.field;
         headerRow.appendChild(hElem);
     });
-
+    const hAuthor = document.createElement('th');
+    hAuthor.textContent = "Author";
+    headerRow.appendChild(hAuthor);
+    const hDate = document.createElement('th');
+    hDate.textContent = "Creation Date";
+    headerRow.appendChild(hDate);
     const tBody = table.querySelector('tbody[id=entries-rows]');
     resp.results.forEach(entry => {
       const newRow = tBody.insertRow();
@@ -394,6 +399,10 @@
             }
         }
       });
+      const authorCell = newRow.insertCell();
+      authorCell.innerHTML = entry.author;
+      const creationCell = newRow.insertCell();
+      creationCell.innerHTML = entry.creationDate;
     });
     
   }
@@ -415,6 +424,12 @@
     delProjectBtn.addEventListener('click', async function(){
       await client.del("entry", {projectId: projectId, entryId: entryId});
       window.location = "/projectDetails.html?projectId=" + projectId;
+    });
+
+    const logOutButton = document.querySelector('button[id=logout]');
+    logOutButton.addEventListener('click', function(){
+      sessionStorage.removeItem('username');
+      window.location = '/';
     });
   }
   init();

@@ -96,11 +96,12 @@
    * A task.
    */
   class ProjectModel {
-    constructor(pName, description, pType, sTarget, fields, labels) {
+    constructor(pName, description, pType, sTarget, pAuthor, fields, labels) {
       this._pName = pName;
       this._description = description;
       this._pType = pType;
       this._sTarget = parseInt(sTarget);
+      this._pAuthor = pAuthor;
       this._fields = [];
       this._labels = [];
       fields.forEach((field)=>{
@@ -120,6 +121,7 @@
     get description() { return this._description; }
     get pType() { return this._pType; }
     get sTarget() { return this._sTarget }
+    get pAuthor() { return this._pAuthor }
     get fields() { return this._fields; }
     get labels() { return this._labels; }
     get creationDate() { return this._creationDate; }
@@ -302,13 +304,13 @@
    * A task that can be synchronized with the REST API.
    */
   class RestProjectModel extends ProjectModel {
-    constructor(pName, description, pType, sTarget, fields, labels, client) {
-      super(pName, description, pType, sTarget, fields, labels);
+    constructor(pName, description, pType, sTarget, pAuthor, fields, labels, client) {
+      super(pName, description, pType, sTarget, pAuthor, fields, labels);
       this._client = client;
     }
 
     toDto() {
-      return {pName: this.pName, description: this.description, pType: this.pType, sizeTarget: this.sTarget, fields: this.fields, labels: this.labels, creationDate: this.creationDate};
+      return {pName: this.pName, description: this.description, pType: this.pType, sizeTarget: this.sTarget, pAuthor: this.pAuthor, fields: this.fields, labels: this.labels, creationDate: this.creationDate};
     }
 
     async create() {
@@ -379,32 +381,40 @@
       const sTarget = document.querySelector('label[id=size-target]').textContent;
       const fields = document.querySelectorAll('.field-left');
       const labels = document.querySelectorAll('.label-left');
-      const model = new RestProjectModel(pName, description, pType, sTarget, fields, labels, client);
+      const user = sessionStorage.getItem('username');
+      const model = new RestProjectModel(pName, description, pType, sTarget, user, fields, labels, client);
       await model.create();
       console.log('Project successfully saved', {model: model.toDto()});
-      window.location = '/';
+      window.location = '/viewProjects.html';
     }
   }
 
   async function init() {
     window.addEventListener('load', function(){
-      const pName = localStorage.getItem("name");
+      const pName = sessionStorage.getItem("name");
       const nameLbl = document.querySelector("label[id=name]");
       nameLbl.textContent = pName;
-      localStorage.removeItem("name");
-      const pDesc = localStorage.getItem("description");
+      sessionStorage.removeItem("name");
+      const pDesc = sessionStorage.getItem("description");
       const descLbl = document.querySelector("label[id=description]");
       descLbl.textContent = pDesc;
-      localStorage.removeItem("description");
-      const sTarget = localStorage.getItem("size-target");
+      sessionStorage.removeItem("description");
+      const sTarget = sessionStorage.getItem("size-target");
       const targetLbl = document.querySelector("label[id=size-target]");
       targetLbl.textContent = sTarget;
-      localStorage.removeItem("size-target");
+      sessionStorage.removeItem("size-target");
     });
+    
     const button = document.getElementById('save-project')
     button.addEventListener('click', function ($event) {
       $event.preventDefault();
       saveProject();
+    });
+
+    const logOutButton = document.querySelector('button[id=logout]');
+    logOutButton.addEventListener('click', function(){
+      sessionStorage.removeItem('username');
+      window.location = '/';
     });
   }
 

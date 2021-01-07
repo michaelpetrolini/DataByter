@@ -375,6 +375,10 @@
       pDescription.innerHTML = project.description;
       let pType = newRow.insertCell();
       pType.innerHTML = project.pType;
+      let pAuthor = newRow.insertCell();
+      pAuthor.innerHTML = project.pAuthor;
+      let creationDate = newRow.insertCell();
+      creationDate.innerHTML = project.creationDate;
       let pActions = newRow.insertCell();
       const anchor = document.createElement('a');
       anchor.href = "projectDetails.html?projectId=" + project.projectId;
@@ -391,6 +395,12 @@
         const table = document.querySelector("tbody[id=projects-rows]");
         $event.preventDefault();
         populateProjectsTable(table);
+    });
+
+    const logOutButton = document.querySelector('button[id=logout]');
+    logOutButton.addEventListener('click', function(){
+      sessionStorage.removeItem('username');
+      window.location = '/';
     });
   }
   init();

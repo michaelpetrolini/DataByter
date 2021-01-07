@@ -398,6 +398,12 @@
         hElem.textContent = field.name;
         headerRow.appendChild(hElem);
     });
+    const hAuthor = document.createElement('th');
+    hAuthor.textContent = "Author";
+    headerRow.appendChild(hAuthor);
+    const hDate = document.createElement('th');
+    hDate.textContent = "Last Update";
+    headerRow.appendChild(hDate);
     const hActions = document.createElement('th');
     hActions.textContent = "Actions";
     headerRow.appendChild(hActions);
@@ -422,6 +428,10 @@
             }
         }
       });
+      const authorCell = newRow.insertCell();
+      authorCell.innerHTML = entry.author;
+      const updateCell = newRow.insertCell();
+      updateCell.innerHTML = entry.creationDate;
       const pActions = newRow.insertCell();
       const viewAnchor = document.createElement('a');
       viewAnchor.href = "entryHistory.html?projectId=" + entry.projectId + "&entryId=" + entry.entryId;
@@ -467,6 +477,12 @@
       const projectId = new URLSearchParams(window.location.search).get('projectId');
       await client.del("project", {projectId: projectId});
       window.location = "/viewProjects.html";
+    });
+
+    const logOutButton = document.querySelector('button[id=logout]');
+    logOutButton.addEventListener('click', function(){
+      sessionStorage.removeItem('username');
+      window.location = '/';
     });
   }
   init();
