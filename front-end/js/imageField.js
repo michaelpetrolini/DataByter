@@ -242,17 +242,6 @@
     }
   }
 
-  function fieldIdOf(el) {
-    const idStr = el.id.substr(5 /*'field-'.length*/);
-    return parseInt(idStr, 10);
-  }
-
-  function removeSelectedFields() {
-    const inps = document.querySelectorAll('.field-left input[type=checkbox]:checked');
-    const fields = Array.prototype.slice.apply(inps).map(el => ({id: fieldIdOf(el)}));
-    fields.forEach(removeField);
-  }
-
   function addField(form) {
     const inp = form.querySelector('input[name=field-name]');
     const fieldName = (inp.value || '').trim();

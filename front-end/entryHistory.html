@@ -23,33 +23,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <meta name="theme-color" content="#fafafa">
+  <script src="js/restClient.js"></script>
 </head>
     <body>
 
         <div class="content">
-            <button id="logout">Log out</button>
+            <button id="logout" class="custom-button">Log out</button>
             <!-- Header -->
             <div class="header">
                 <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
             </div>
 
             <div class="buttons-row">
-                <a id="back">
+                <a id="back" class="custom-button">
                     <i class="eos-icons">backspace</i>
                     <span>Back</span>
                 </a>
-                <button id="delete-entry">
+                <button id="delete-entry" class="custom-button">
                     <i class="eos-icons">delete</i>
                     <span>Delete Entry</span>
                 </button>
-                <a id="update-entry">
+                <a id="update-entry" class="custom-button">
                     <i class="eos-icons">edit</i>
                     <span>Update Entry</span>
                 </a>
             </div>
 
             <!-- Panels -->
-            <div class="panel">
+            <div class="panel" style="overflow-x: auto;">
                 <table id="entries-table" style="width: 100%;">
                     <thead>
                         <tr id="header-row"></tr>

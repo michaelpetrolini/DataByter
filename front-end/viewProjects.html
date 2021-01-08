@@ -23,11 +23,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <meta name="theme-color" content="#fafafa">
+  <script src="js/restClient.js"></script>
 </head>
     <body>
 
         <div class="content">
-            <button id="logout">Log out</button>
+            <button id="logout" class="custom-button">Log out</button>
             <!-- Header -->
             <div class="header">
                 <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
@@ -37,13 +38,13 @@
                 <h2 class="text-center">View other Projects</h2>
             </div>
 
-            <a href="createProject.html">
+            <a href="createProject.html" class="custom-button">
                 <span>Create a new Project</span>
                 <i class="eos-icons">add</i>
             </a>
 
             <!-- Panels -->
-            <div class="panel">
+            <div class="panel" style="overflow-x: auto;">
                 <table class="projects-table" style="width: 100%;">
                     <thead>
                         <tr>
@@ -60,6 +61,6 @@
             </div>
         </div>
 
-        <script src="js/getProjects.js"></script>
+        <script src="js/viewProjects.js"></script>
     </body>
 </html>

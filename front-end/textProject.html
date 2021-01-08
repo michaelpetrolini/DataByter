@@ -22,11 +22,12 @@
   <link rel="stylesheet" href="css/eos-icons.css">
 
   <meta name="theme-color" content="#fafafa">
+  <script src="js/restClient.js"></script>
 </head>
 <body>
 
 <div class="content">
-  <button id="logout">Log out</button>
+  <button id="logout" class="custom-button">Log out</button>
   <!-- Header -->
   <div class="header">
     <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
@@ -36,7 +37,7 @@
     <h2 class="text-center">Create a new Project</h2>
   </div>
 
-  <a href="/">
+  <a href="/viewProjects.html" class="custom-button">
     <i class="eos-icons">backspace</i>
     <span>Back</span>
   </a>
@@ -75,7 +76,7 @@
             <option value="Boolean">Boolean</option>
             <option value="Date">Date</option>
           </select>
-          <button type="submit">
+          <button type="submit" class="custom-button">
             <i class="eos-icons">add</i>
             <span>Add</span>
           </button>
@@ -97,7 +98,7 @@
       <div class="form-group">
         <div class="input-group">
           <input name="label-value" type="text" value="" maxlength="15">
-          <button type="submit">
+          <button type="submit" class="custom-button">
             <i class="eos-icons">add</i>
             <span>Add</span>
           </button>
@@ -109,11 +110,11 @@
   </div>
 
   <div class="act-btn">
-    <a href="/">
+    <a href="/viewProjects.html" class="custom-button">
       <i class="eos-icons">backspace</i>
       <span>Cancel</span>
     </a>
-    <button id="save-project">
+    <button id="save-project" class="custom-button">
       <i class="eos-icons">save</i>
       <span>Save Project</span>
     </button>
@@ -128,8 +129,8 @@
   </div>
 
   <div class="field-right">
-    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
-    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
+    <button name="edit" title="Edit this field" class="custom-button"><i class="eos-icons">edit</i></button>
+    <button name="remove" title="Remove this field" class="custom-button"><i class="eos-icons">delete</i></button>
   </div>
 </script>
 
@@ -143,8 +144,8 @@
         <option value="Boolean">Boolean</option>
         <option value="Date">Date</option>
       </select>
-      <button name="save" class="primary"><i class="eos-icons">save</i></button>
-      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
+      <button name="save" class="custom-button"><i class="eos-icons">save</i></button>
+      <button name="cancel" class="custom-button"><i class="eos-icons">cancel</i></button>
     </div>
   </div>
 </script>
@@ -155,8 +156,8 @@
   </div>
 
   <div class="label-right">
-    <button name="edit" title="Edit this field"><i class="eos-icons">edit</i></button>
-    <button name="remove" title="Remove this field"><i class="eos-icons">delete</i></button>
+    <button name="edit" title="Edit this field" class="custom-button"><i class="eos-icons">edit</i></button>
+    <button name="remove" title="Remove this field" class="custom-button"><i class="eos-icons">delete</i></button>
   </div>
 </script>
 
@@ -164,8 +165,8 @@
   <div class="form-group">
     <div class="input-group">
       <input type="text" maxlength="15">
-      <button name="save" class="primary"><i class="eos-icons">save</i></button>
-      <button name="cancel" class="warn"><i class="eos-icons">cancel</i></button>
+      <button name="save" class="custom-button"><i class="eos-icons">save</i></button>
+      <button name="cancel" class="custom-button"><i class="eos-icons">cancel</i></button>
     </div>
   </div>
 </script>

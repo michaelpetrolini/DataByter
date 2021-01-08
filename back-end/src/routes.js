@@ -1,62 +1,7 @@
 'use strict';
 
-function sequencer() {
-    let i = 1;
-    return function () {
-        const n = i;
-        i++;
-        return n;
-    }
-}
-
-class Task {
-    constructor(id, description) {
-        this._id = id;
-        this._description = description;
-        this._timestamp = new Date();
-    }
-
-    //@formatter:off
-    get id() { return this._id; }
-    get description() { return this._description; }
-    set description(description) { this._description = description; }
-    get timestamp() { return this._timestamp; }
-    //@formatter:on
-}
-
-const seq = sequencer();
-const tasks = [];
-
-for (let i = 0; i < 5; i++) {
-    const id = seq();
-    tasks.push(new Task(id, `Spend more time hacking #${id}`));
-}
-
-function toDTO(task) {
-    return {
-        id: task.id,
-        description: task.description,
-        timestamp: task.timestamp // should be converted according to ISO8601
-    };
-}
-
 function isNonBlank(str) {
     return typeof str === 'string' && str.trim();
-}
-
-function isInteger(n) {
-    if (typeof n === 'number') {
-        return true;
-    }
-    if (typeof n === 'string') {
-        try {
-            parseInt(n, 10);
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-    return false;
 }
 
 function routes(app) {
@@ -186,6 +131,36 @@ function routes(app) {
         });
     });
 
+    app.get('/balancePiechart', (req, resp) => {
+        const projectId = parseInt(req.query.projectId);
+        console.debug('Retrieving project balance stats');
+        mongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            const dbo = db.db("databyter");
+            const firstMatch = {$match: {projectId: projectId, isActive: true}};
+            const unwind = {$unwind: '$fields'};
+            const secondMatch = {$match: {'fields.isLabel': true}};
+            const firstGroup = {$group: {_id: {value: '$fields.value'}, occurrences:{$sum: 1}}};
+            const secondGroup = {$group: {_id: null, labels: {$push: {label: '$_id.value', occurrences: '$occurrences'}}}};
+            const getPromise = () => {
+                return new Promise((resolve, reject) => {
+                    dbo.collection("entries").aggregate([firstMatch, unwind, secondMatch, firstGroup, secondGroup]).toArray(function (err, entries) {
+                        err ? reject(err) : resolve(entries);
+                    });
+                });
+            };
+            const execGetPromise = async () => {
+            
+                var result = await (getPromise());
+                return result;
+            };
+            execGetPromise().then(function(result) {          
+                db.close();
+                resp.json(result);
+            });
+        });
+    });
+
     app.post('/checkUser', (req, resp) => {
         const username = req.body.username;
         const password = req.body.password;
@@ -263,7 +238,7 @@ function routes(app) {
             const dbo = db.db("databyter");
             const query = {projectId: projectId};
             const today = new Date().toISOString().slice(0,10);
-            const update = {$set:{lastUpdate: today}, $inc:{entryId: 1}};
+            const update = {$set:{lastEntry: today}, $inc:{entryId: 1}};
             dbo.collection("projects").findOneAndUpdate(query, update, function(err, result) {
               if (err) throw err;
               newEntry.projectId = result.value.projectId;
@@ -285,7 +260,7 @@ function routes(app) {
     app.post('/saveProject', (req, resp) => {
         const newProject = req.body;
         console.debug('Attempting to crete a new project', newProject);
-        if (!isNonBlank(newProject.pName) || newProject.fields.length === 0 || newProject.labels.length === 0) {
+        if (!isNonBlank(newProject.pName) || newProject.fields.length == 0 || newProject.labels.length == 0) {
             resp.status(400);
             resp.json({error: 'Error in the format of the project'});
             return;
@@ -396,7 +371,7 @@ function routes(app) {
                 if (err) throw err;
                 console.info('Entry successfully deleted');
                 resp.status(200);
-                resp.json(toDTO(result));
+                resp.json(result);
             });
         });
     });
@@ -414,7 +389,7 @@ function routes(app) {
                     console.info('Project successfully deleted');
                     if (err) throw err;
                     resp.status(200);
-                    resp.json(toDTO(result));
+                    resp.json(result);
                 });
             });
         });

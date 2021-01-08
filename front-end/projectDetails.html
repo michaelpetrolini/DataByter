@@ -1,33 +1,40 @@
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>DataByter</title>
-  <meta name="description" content="SOI2020 Project- DataByter">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>DataByter</title>
+    <meta name="description" content="SOI2020 Project- DataByter">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta property="og:title" content="DataByter">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://databyter">
-  <meta property="og:image" content="http://databyter/logo.png">
+    <meta property="og:title" content="DataByter">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://databyter">
+    <meta property="og:image" content="http://databyter/logo.png">
 
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="apple-touch-icon" href="logo.png">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/custom.css">
-  <link rel="stylesheet" href="css/eos-icons.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/eos-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <meta name="theme-color" content="#fafafa">
+    <meta name="theme-color" content="#fafafa">
+    <script src="js/restClient.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/piecharts.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(balancePiechart);
+    </script>
 </head>
     <body>
 
         <div class="content">
-            <button id="logout">Log out</button>
+            <button id="logout" class="custom-button">Log out</button>
             <!-- Header -->
             <div class="header">
                 <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
@@ -61,25 +68,26 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div id="piechart"></div>
 
             <div class="buttons-row">
-                <a href="viewProjects.html">
+                <a href="viewProjects.html" class="custom-button">
                     <i class="eos-icons">backspace</i>
                     <span>Back</span>
                 </a>
-                <button id="delete-project">
+                <button id="delete-project" class="custom-button">
                     <i class="eos-icons">delete</i>
                     <span>Delete Project</span>
                 </button>
-                <a id="add-entry">
+                <a id="add-entry" class="custom-button">
                     <i class="eos-icons">add_circle</i>
                     <span>Add a new Entry</span>
                 </a>
             </div>
 
             <!-- Panels -->
-            <div class="panel">
+            <div class="panel" style="overflow-x: auto;">
                 <table id="entries-table" style="width: 100%;">
                     <thead>
                         <tr id="header-row"></tr>
@@ -88,6 +96,18 @@
                 </table>
             </div>
         </div>
+
+        <script type="text/html" id="actions-cell">
+            <a id="entry-history" class="custom-button">
+                <i class="eos-icons">search</i>
+            </a>
+            <a id="update-entry" class="custom-button">
+                <i class="eos-icons">edit</i>
+            </a>
+            <button id="delete-entry" class="custom-button">
+                <i class="eos-icons">delete</i>
+            </button>
+        </script>
 
         <script src="js/projectDetails.js"></script>
     </body>
