@@ -110,10 +110,6 @@
       const typeVal = document.createElement('label');
       typeVal.textContent = projectInfo.pType;
       typeLbl.after(typeVal);
-      const entriesLbl = infoPanel.querySelector('label[id=project-entries]');
-      const entriesVal = document.createElement('label');
-      entriesVal.textContent = resp.total;
-      entriesLbl.after(entriesVal);
       const authorLbl = infoPanel.querySelector('label[id=project-author]');
       const authorVal = document.createElement('label');
       authorVal.textContent = projectInfo.pAuthor;
@@ -122,10 +118,6 @@
       const creationVal = document.createElement('label');
       creationVal.textContent = projectInfo.creationDate;
       creationLbl.after(creationVal);
-      const lastLbl = infoPanel.querySelector('label[id=project-last-entry]');
-      const lastVal = document.createElement('label');
-      lastVal.textContent = projectInfo.lastEntry;
-      lastLbl.after(lastVal);
     }
   }
 

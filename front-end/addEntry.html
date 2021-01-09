@@ -27,60 +27,64 @@
 <body>
 
 <div class="content">
-  <button id="logout" class="custom-button">Log out</button>
-  <!-- Header -->
-  <div class="header">
-    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
-  </div>
+  <div class="navigation-bar">
+    <div class="row-group">
+        <div>
+            <img class="logo" src="logo.png" alt="DataByter Logo">
+            <label class="title">DataByter</label>
+        </div>
+        <button id="logout" class="right custom-button">Log out</button>
+    </div>
+</div>
 
-  <div class="header">
+  <div class="sub-header">
     <h2 class="text-center">Add a new Entry</h2>
   </div>
 
-  <a id="back-btn" class="custom-button">
-    <i class="eos-icons">backspace</i>
-    <span>Back</span>
-  </a>
+  <div class="invisible-panel">
+    <a id="back-btn" class="custom-button">
+      <i class="eos-icons">backspace</i>
+      <span>Back</span>
+    </a>
+  </div>
 
   <div class="panel" id="info-panel">
-    <div class="panel-row">
-        <div class="panel-elem">
-            <label id="project-name"><b>Name: </b></label>
+    <div class="row-group">
+        <div class="col-group">
+            <div class="row-group">
+                <label id="project-name"><b>Name: </b></label>
+            </div>
+            <div class="row-group">
+                <label id="project-author"><b>Author: </b></label>
+            </div>
         </div>
-        <div class="panel-elem">
-            <label id="project-type"><b>Type: </b></label>
-        </div>
-        <div class="panel-elem">
-            <label id="project-entries"><b>Entries: </b></label>
-        </div>
-    </div>
-    <div class="panel-row">
-        <div class="panel-elem">
-            <label id="project-author"><b>Author: </b></label>
-        </div>
-        <div class="panel-elem">
-            <label id="project-creation"><b>Creation: </b></label>
-        </div>
-        <div class="panel-elem">
-            <label id="project-last-entry"><b>Last Entry: </b></label>
+        <div class="col-group">
+            <div class="row-group">
+                <label id="project-type"><b>Type: </b></label>
+            </div>
+            <div class="row-group">
+                <label id="project-creation"><b>Creation: </b></label>
+            </div>  
         </div>
     </div>
-</div>
+  </div>
 
   <!-- Panels -->
   <div class="panel">
     <div id="fields"></div>
   </div>
 
-  <div class="act-btn">
-    <a id="cancel-btn" class="custom-button">
-      <i class="eos-icons">backspace</i>
-      <span>Cancel</span>
-    </a>
-    <button id="add-entry" class="custom-button">
-      <i class="eos-icons">save</i>
-      <span>Add Entry</span>
-    </button>
+  <div class="invisible-panel">
+    <div class="row-group">
+      <a id="cancel-btn" class="custom-button">
+        <i class="eos-icons">backspace</i>
+        <span>Cancel</span>
+      </a>
+      <button id="add-entry" class="custom-button">
+        <i class="eos-icons">save</i>
+        <span>Add Entry</span>
+      </button>
+    </div>
   </div>
 </div>
 <script src="js/addEntry.js"></script>

@@ -21,31 +21,7 @@
   async function addFields(fieldsDiv, projectId, entryId) {
     const resp = await client.get("project", {id: projectId});
     const projectInfo = resp.project;
-    const infoPanel = document.querySelector("div[id=info-panel]");
-    const nameLbl = infoPanel.querySelector('label[id=project-name]');
-    const nameVal = document.createElement('label');
-    nameVal.textContent = projectInfo.pName;
-    nameLbl.after(nameVal);
-    const typeLbl = infoPanel.querySelector('label[id=project-type]');
-    const typeVal = document.createElement('label');
-    typeVal.textContent = projectInfo.pType;
-    typeLbl.after(typeVal);
-    const entriesLbl = infoPanel.querySelector('label[id=project-entries]');
-    const entriesVal = document.createElement('label');
-    entriesVal.textContent = resp.total;
-    entriesLbl.after(entriesVal);
-    const authorLbl = infoPanel.querySelector('label[id=project-author]');
-    const authorVal = document.createElement('label');
-    authorVal.textContent = projectInfo.pAuthor;
-    authorLbl.after(authorVal);
-    const creationLbl = infoPanel.querySelector('label[id=project-creation]');
-    const creationVal = document.createElement('label');
-    creationVal.textContent = projectInfo.creationDate;
-    creationLbl.after(creationVal);
-    const lastLbl = infoPanel.querySelector('label[id=project-last-entry]');
-    const lastVal = document.createElement('label');
-    lastVal.textContent = projectInfo.lastEntry;
-    lastLbl.after(lastVal);
+    populateInfoPanel(projectInfo);
     const rsp = await client.get("entry", {projectId: projectId, entryId: entryId});
     for(let i in resp.project.fields) {
         const field = resp.project.fields[i];
@@ -120,6 +96,26 @@
             }
         }
         fieldsDiv.appendChild(fieldContainer);
+    }
+
+    function populateInfoPanel(projectInfo) {
+      const infoPanel = document.querySelector("div[id=info-panel]");
+      const nameLbl = infoPanel.querySelector('label[id=project-name]');
+      const nameVal = document.createElement('label');
+      nameVal.textContent = projectInfo.pName;
+      nameLbl.after(nameVal);
+      const typeLbl = infoPanel.querySelector('label[id=project-type]');
+      const typeVal = document.createElement('label');
+      typeVal.textContent = projectInfo.pType;
+      typeLbl.after(typeVal);
+      const authorLbl = infoPanel.querySelector('label[id=project-author]');
+      const authorVal = document.createElement('label');
+      authorVal.textContent = projectInfo.pAuthor;
+      authorLbl.after(authorVal);
+      const creationLbl = infoPanel.querySelector('label[id=project-creation]');
+      const creationVal = document.createElement('label');
+      creationVal.textContent = projectInfo.creationDate;
+      creationLbl.after(creationVal);
     }
   }
 

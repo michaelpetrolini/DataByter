@@ -39,6 +39,9 @@
       const creationDate = new Date().toISOString().slice(0,10);
       const project = {pName: pName, description: description, pType: pType, sizeTarget: sTarget, pAuthor: user, fields: fields, labels: labels, creationDate: creationDate};
       const result = await client.post('saveProject', project);
+      sessionStorage.removeItem("name");
+      sessionStorage.removeItem("description");
+      sessionStorage.removeItem("size-target");
       console.log('Project successfully saved');
       window.location = '/viewProjects.html';
     }
@@ -49,15 +52,12 @@
       const pName = sessionStorage.getItem("name");
       const nameLbl = document.querySelector("label[id=name]");
       nameLbl.textContent = pName;
-      sessionStorage.removeItem("name");
       const pDesc = sessionStorage.getItem("description");
       const descLbl = document.querySelector("label[id=description]");
       descLbl.textContent = pDesc;
-      sessionStorage.removeItem("description");
       const sTarget = sessionStorage.getItem("size-target");
       const targetLbl = document.querySelector("label[id=size-target]");
       targetLbl.textContent = sTarget;
-      sessionStorage.removeItem("size-target");
     });
     
     const button = document.getElementById('save-project')

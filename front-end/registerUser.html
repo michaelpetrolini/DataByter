@@ -28,33 +28,35 @@
 <body>
 
 <div class="content">
-
-  <!-- Header -->
-  <div class="header">
-    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+  <div class="navigation-bar">
+    <div class="row-group">
+        <div>
+            <img class="logo" src="logo.png" alt="DataByter Logo">
+            <label class="title">DataByter</label>
+        </div>
+    </div>
   </div>
 
+  <div class="sub-header">
+    <h2 class="text-center">Register User</h2>
+  </div>  
+
   <!-- Panels -->
-  <div class="panel">
-    <div class="column">
-        <div class="row">
-            <label>Enter your Email: </label>
-            <input type="text" id="email">
-        </div>
-        <div class="row">
-            <label>Choose a Username: </label>
-            <input type="text" id="username">
-        </div>
-        <div class="row">
-            <label>Choose a Password: </label>
-            <input type="password" id="password">
-        </div>
-        <div class="row">
-            <label>Repeat Password: </label>
-            <input type="password" id="password-check">
-        </div>
-        <a href="/">Back</a>
-        <button id="sign-up">Sign Up</button>
+  <div class="strict-panel">
+    <div class="col-group">
+      <label>Enter your Email: </label>
+      <input type="text" id="email">
+      <label>Choose a Username: </label>
+      <input type="text" id="username">
+      <label>Choose a Password: </label>
+      <input type="password" id="password">
+      <label>Repeat Password: </label>
+      <input type="password" id="password-check">
+    </div>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="row-group">
+      <a class="custom-button" href="/">Back</a>
+      <button class="custom-button" id="sign-up">Sign Up</button>
     </div>
   </div>
 

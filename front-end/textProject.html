@@ -27,45 +27,58 @@
 <body>
 
 <div class="content">
-  <button id="logout" class="custom-button">Log out</button>
-  <!-- Header -->
-  <div class="header">
-    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
-  </div>
+  <div class="navigation-bar">
+    <div class="row-group">
+        <div>
+            <img class="logo" src="logo.png" alt="DataByter Logo">
+            <label class="title">DataByter</label>
+        </div>
+        <button id="logout" class="right custom-button">Log out</button>
+    </div>
+</div>
 
-  <div class="header">
+  <div class="sub-header">
     <h2 class="text-center">Create a new Project</h2>
   </div>
 
-  <a href="/viewProjects.html" class="custom-button">
-    <i class="eos-icons">backspace</i>
-    <span>Back</span>
-  </a>
+  <div class="invisible-panel">
+    <a href="/createProject.html" class="custom-button">
+      <i class="eos-icons">backspace</i>
+      <span>Back</span>
+    </a>
+  </div>
 
   <div class="panel">
-    <h5>Project properties</h5>
-    <div class="ibox-content">
-      <div class="ibox-elem">
-          <label><b>Name: </b></label>
-          <label id="name"></label>
+    <h4>Project properties</h4>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="row-group">
+      <div class="col-group">
+        <div class="row-group">
+            <label><b>Name: </b></label>
+            <label id="name"></label>
+        </div>
+        <div class="row-group">
+          <label><b>Description: </b></label>
+          <label id="description"></label>
+        </div>
       </div>
-      <div class="ibox-elem">
-        <label><b>Description: </b></label>
-        <label id="description"></label>
-      </div>
-      <div class="ibox-elem">
-        <label><b>Type: </b></label>
-        <label id="type">Text</label>
-      </div>
-      <div class="ibox-elem">
-        <label><b>Size Target: </b></label>
-        <label id="size-target"></label>
+      <div class="col-group">
+        <div class="row-group">
+          <label><b>Type: </b></label>
+          <label id="type">Text</label>
+        </div>
+        <div class="row-group">
+          <label><b>Size Target: </b></label>
+          <label id="size-target"></label>
+        </div>
       </div>
     </div>
   </div>
-
+  
   <!-- Panels -->
   <div class="panel">
+    <h4>Project fields</h4>
+    <hr style="width:100%;text-align:left;margin-left:0">
     <form name="new-field">
       <div class="form-group">
         <div class="input-group">
@@ -85,15 +98,18 @@
     </form>
     <hr style="width:100%;text-align:left;margin-left:0">
     <div class="fields">
-      <div class="columns">
-        <h5>Field</h5>
-        <h5>Type</h5>
-        <h5>Label</h5>
+      <div class="row-group">
+        <label><b>Field</b></label>
+        <label><b>Type</b></label>
+        <label><b>Label</b></label>
+        <label><b>Actions</b></label>
       </div>
     </div>
   </div>
 
   <div class="panel">
+    <h4>Project labels</h4>
+    <hr style="width:100%;text-align:left;margin-left:0">
     <form name="new-label">
       <div class="form-group">
         <div class="input-group">
@@ -109,15 +125,17 @@
     <div class="labels"></div>
   </div>
 
-  <div class="act-btn">
-    <a href="/viewProjects.html" class="custom-button">
-      <i class="eos-icons">backspace</i>
-      <span>Cancel</span>
-    </a>
-    <button id="save-project" class="custom-button">
-      <i class="eos-icons">save</i>
-      <span>Save Project</span>
-    </button>
+  <div class="invisible-panel">
+    <div class="row-group">
+      <a href="/createProject.html" class="custom-button">
+        <i class="eos-icons">backspace</i>
+        <span>Cancel</span>
+      </a>
+      <button id="save-project" class="custom-button">
+        <span>Save Project</span>
+        <i class="eos-icons">save</i>
+      </button>
+    </div>
   </div>
 </div>
 

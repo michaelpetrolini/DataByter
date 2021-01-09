@@ -28,20 +28,27 @@
     <body>
 
         <div class="content">
-            <button id="logout" class="custom-button">Log out</button>
             <!-- Header -->
-            <div class="header">
-                <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+            <div class="navigation-bar">
+                <div class="row-group">
+                    <div>
+                        <img class="logo" src="logo.png" alt="DataByter Logo">
+                        <label class="title">DataByter</label>
+                    </div>
+                    <button id="logout" class="right custom-button">Log out</button>
+                </div>
             </div>
 
-            <div class="header">
+            <div class="sub-header">
                 <h2 class="text-center">View other Projects</h2>
             </div>
 
-            <a href="createProject.html" class="custom-button">
-                <span>Create a new Project</span>
-                <i class="eos-icons">add</i>
-            </a>
+            <div class="invisible-panel">
+                <a href="createProject.html" class="custom-button">
+                    <span>Create a new Project</span>
+                    <i class="eos-icons">add_circle</i>
+                </a>
+            </div>
 
             <!-- Panels -->
             <div class="panel" style="overflow-x: auto;">

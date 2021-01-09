@@ -131,7 +131,7 @@ function routes(app) {
         });
     });
 
-    app.get('/balancePiechart', (req, resp) => {
+    app.get('/piechartData', (req, resp) => {
         const projectId = parseInt(req.query.projectId);
         console.debug('Retrieving project balance stats');
         mongoClient.connect(url, function(err, db) {
@@ -154,9 +154,13 @@ function routes(app) {
                 var result = await (getPromise());
                 return result;
             };
-            execGetPromise().then(function(result) {          
-                db.close();
-                resp.json(result);
+            execGetPromise().then(function(result) { 
+                dbo.collection("projects").findOne({projectId: projectId}, function(err, project){
+                    if (err) throw err;
+                    db.close();
+                    resp.json({sizeTarget: project.sizeTarget,
+                        balance: result});
+                });         
             });
         });
     });

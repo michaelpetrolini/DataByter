@@ -28,28 +28,32 @@
 <body>
 
 <div class="content">
+  <div class="navigation-bar">
+    <div class="row-group">
+        <div>
+            <img class="logo" src="logo.png" alt="DataByter Logo">
+            <label class="title">DataByter</label>
+        </div>
+    </div>
+</div>
 
-  <!-- Header -->
-  <div class="header">
-    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
-  </div>
+<div class="sub-header">
+  <h2 class="text-center">Welcome!</h2>
+</div>
 
   <!-- Panels -->
-  <div class="panel">
-    <div class="column">
-      <div class="row">
+  <div class="strict-panel">
+    <div class="col-group">
         <label>Username: </label>
         <input type="text" id="username">
-      </div>
-      <div class="row">
         <label>Password: </label>
         <input type="password" id="password">
-      </div>
+    </div>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="row-group">
+      <a class="custom-button" href="changePassword.html">Forgot password?</a>
+      <a class="custom-button" href="registerUser.html">Sign up</a>
       <button id="sign-in" class="custom-button">Sign In</button>
-      <div class="row">
-        <a href="changePassword.html">Forgot password?</a>
-        <a href="registerUser.html">Sign up</a>
-      </div>
     </div>
   </div>
 

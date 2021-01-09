@@ -26,55 +26,57 @@
 <body>
 
 <div class="content">
-  <button id="logout" class="custom-button">Log out</button>
-  <!-- Header -->
-  <div class="header">
-    <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+  <div class="navigation-bar">
+    <div class="row-group">
+        <div>
+            <img class="logo" src="logo.png" alt="DataByter Logo">
+            <label class="title">DataByter</label>
+        </div>
+        <button id="logout" class="right custom-button">Log out</button>
+    </div>
+</div>
+
+  <div class="sub-header">
+    <h2 class="text-center">Create Project</h2>
+  </div>
+  <div class="invisible-panel">
+    <a href="viewProjects.html" class="custom-button">
+      <i class="eos-icons">backspace</i>
+      <span>Back</span>
+    </a>
   </div>
 
-  <div class="header">
-    <h2 class="text-center">Create a new Project</h2>
-  </div>
-
-  <a href="viewProjects.html" class="custom-button">
-    <i class="eos-icons">backspace</i>
-    <span>Back</span>
-  </a>
-
-  <div class="panel">
-    <h5>Project properties</h5>
-    <div class="ibox-content">
-      <div class="ibox-elem">
-          <label>Name:</label>
-          <input type="text" class="form-control" id="name" value="">
-      </div>
-      <div class="ibox-elem">
-        <label>Description:</label>
-        <input type="text" class="form-control" id="description" value="">
-      </div>
-      <div class="ibox-elem">
-        <label>Type:</label>
+  <div class="strict-panel">
+    <h4>Project properties</h4>
+    <hr style="width:100%;text-align:left;margin-left:0">
+    <div class="col-group">
+      <label>Name:</label>
+      <input type="text" class="form-control" id="name" value="">
+      <label>Description:</label>
+      <input type="text" class="form-control" id="description" value="">
+      <label>Size Target:</label>
+      <input type="number" class="form-control" id="size-target" value="0">
+      <label>Type:</label>
+      <div class="row-group">
         <input type="radio" id="text" name="type" value="text" checked="checked">
         <label for="text">Text</label>
         <input type="radio" id="image" name="type" value="image">
         <label for="image">Image</label>
       </div>
-      <div class="ibox-elem">
-        <label>Size Target:</label>
-        <input type="number" class="form-control" id="size-target" value="0">
-      </div>
     </div>
   </div>
 
-  <div class="act-btn">
-    <a href="/viewProjects.html" class="custom-button">
-      <i class="eos-icons">backspace</i>
-      <span>Cancel</span>
-    </a>
-    <button id="project-specs" class="custom-button">
-      <i class="eos-icons">save</i>
-      <span>Project Specifics</span>
-    </button>
+  <div class="invisible-panel">
+    <div class="row-group">
+      <a href="/viewProjects.html" class="custom-button">
+        <i class="eos-icons">backspace</i>
+        <span>Cancel</span>
+      </a>
+      <button id="project-specs" class="custom-button">
+        <span>Project Specifics</span>
+        <i class="eos-icons">forward</i>
+      </button>
+    </div>
   </div>
 </div>
 

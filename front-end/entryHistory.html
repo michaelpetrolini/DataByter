@@ -28,25 +28,35 @@
     <body>
 
         <div class="content">
-            <button id="logout" class="custom-button">Log out</button>
-            <!-- Header -->
-            <div class="header">
-                <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+            <div class="navigation-bar">
+                <div class="row-group">
+                    <div>
+                        <img class="logo" src="logo.png" alt="DataByter Logo">
+                        <label class="title">DataByter</label>
+                    </div>
+                    <button id="logout" class="right custom-button">Log out</button>
+                </div>
             </div>
 
-            <div class="buttons-row">
-                <a id="back" class="custom-button">
-                    <i class="eos-icons">backspace</i>
-                    <span>Back</span>
-                </a>
-                <button id="delete-entry" class="custom-button">
-                    <i class="eos-icons">delete</i>
-                    <span>Delete Entry</span>
-                </button>
-                <a id="update-entry" class="custom-button">
-                    <i class="eos-icons">edit</i>
-                    <span>Update Entry</span>
-                </a>
+            <div class="sub-header">
+                <h2 class="text-center">Entry History</h2>
+              </div>
+
+            <div class="invisible-panel">
+                <div class="row-group">
+                    <a id="back" class="custom-button">
+                        <i class="eos-icons">backspace</i>
+                        <span>Back</span>
+                    </a>
+                    <button id="delete-entry" class="custom-button">
+                        <span>Delete Entry</span>
+                        <i class="eos-icons">delete</i>
+                    </button>
+                    <a id="update-entry" class="custom-button">
+                        <span>Update Entry</span>
+                        <i class="eos-icons">edit</i>
+                    </a>
+                </div>
             </div>
 
             <!-- Panels -->

@@ -28,62 +28,74 @@
     <script src="js/piecharts.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(balancePiechart);
+        google.charts.setOnLoadCallback(charts);
     </script>
 </head>
     <body>
-
         <div class="content">
-            <button id="logout" class="custom-button">Log out</button>
-            <!-- Header -->
-            <div class="header">
-                <h1 class="text-center"><img class="logo" src="logo.png" width="52" alt="DataByter Logo">DataByter</h1>
+            <div class="navigation-bar">
+                <div class="row-group">
+                    <div>
+                        <img class="logo" src="logo.png" alt="DataByter Logo">
+                        <label class="title">DataByter</label>
+                    </div>
+                    <button id="logout" class="right custom-button">Log out</button>
+                </div>
             </div>
 
-            <div class="header">
+            <div class="sub-header">
                 <h2 class="text-center">Project Details</h2>
             </div>
 
-            <div class="panel" id="info-panel">
-                <div class="panel-row">
-                    <div class="panel-elem">
-                        <label id="project-name"><b>Name: </b></label>
-                    </div>
-                    <div class="panel-elem">
-                        <label id="project-type"><b>Type: </b></label>
-                    </div>
-                    <div class="panel-elem">
-                        <label id="project-entries"><b>Entries: </b></label>
-                    </div>
-                </div>
-                <div class="panel-row">
-                    <div class="panel-elem">
-                        <label id="project-author"><b>Author: </b></label>
-                    </div>
-                    <div class="panel-elem">
-                        <label id="project-creation"><b>Creation: </b></label>
-                    </div>
-                    <div class="panel-elem">
-                        <label id="project-last-entry"><b>Last Entry: </b></label>
-                    </div>
+            <div class="invisible-panel">
+                <div class="row-group">
+                    <a href="viewProjects.html" class="custom-button">
+                        <i class="eos-icons">backspace</i>
+                        <span>Back</span>
+                    </a>
+                    <button id="delete-project" class="custom-button">
+                        <span>Delete Project</span>
+                        <i class="eos-icons">delete</i>
+                    </button>
+                    <a id="add-entry" class="custom-button">
+                        <span>Add Entry</span>
+                        <i class="eos-icons">add_circle</i>
+                    </a>
                 </div>
             </div>
 
-            <div id="piechart"></div>
+            <div class="panel" id="info-panel">
+                <div class="row-group">
+                    <div class="col-group">
+                        <div class="row-group">
+                            <label id="project-name"><b>Name: </b></label>
+                        </div>
+                        <div class="row-group">
+                            <label id="project-author"><b>Author: </b></label>
+                        </div>
+                    </div>
+                    <div class="col-group">
+                        <div class="row-group">
+                            <label id="project-type"><b>Type: </b></label>
+                        </div>
+                        <div class="row-group">
+                            <label id="project-creation"><b>Creation: </b></label>
+                        </div>  
+                    </div>
+                    <div class="col-group">
+                        <div class="row-group">
+                            <label id="project-entries"><b>Entries: </b></label>
+                        </div>
+                        <div class="row-group">
+                            <label id="project-last-entry"><b>Last Entry: </b></label>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="buttons-row">
-                <a href="viewProjects.html" class="custom-button">
-                    <i class="eos-icons">backspace</i>
-                    <span>Back</span>
-                </a>
-                <button id="delete-project" class="custom-button">
-                    <i class="eos-icons">delete</i>
-                    <span>Delete Project</span>
-                </button>
-                <a id="add-entry" class="custom-button">
-                    <i class="eos-icons">add_circle</i>
-                    <span>Add a new Entry</span>
-                </a>
+                <div class="row-group">
+                    <div id="statusBarchart"></div>
+                    <div id="balancePiechart"></div>
+                </div>
             </div>
 
             <!-- Panels -->
