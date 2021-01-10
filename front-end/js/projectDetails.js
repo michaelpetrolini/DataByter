@@ -91,7 +91,7 @@
       const delButton = rowDiv.querySelector('button[id=delete-entry]');
       delButton.addEventListener('click', async function() {
         await client.del("entry",{projectId: entry.projectId, entryId: entry.entryId});
-        location.reload();
+        newRow.remove();
       });
       pActions.appendChild(rowDiv);
     });
@@ -119,6 +119,12 @@
     logOutButton.addEventListener('click', function(){
       sessionStorage.removeItem('username');
       window.location = '/';
+    });
+
+    const downloadButton = document.querySelector('button[id=download]');
+    downloadButton.addEventListener('click', function() {
+      const projectName = document.querySelector('label[id=project-name]').nextSibling.textContent;
+      exportTableToCSV(projectName + '.csv');
     });
   }
   init();
